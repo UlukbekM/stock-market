@@ -4,6 +4,8 @@ import { cookies } from 'next/headers'
 import { Database } from '@/types/supabase'
 import Balance from './Balance'
 import Data from './Data'
+import { BalanceProvider } from './BalanceProvider'
+import axios from 'axios'
 
 export default async function dashboard() {
 
@@ -11,10 +13,10 @@ export default async function dashboard() {
     const { data: { session } } = await supabase.auth.getSession()
     // https://www.alphavantage.co/ STOCK API
     // 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo'
-
-
+    // https://site.financialmodelingprep.com/developer/docs
 
     return(
+        <BalanceProvider>
         <div className="flex bg-[#1B2627] w-screen h-screen text-white">
             <div className='hidden lg:flex flex-col p-3 '>
                 <div className='pb-5 font-bold text-2xl'>
@@ -61,15 +63,8 @@ export default async function dashboard() {
                     </div>
                 </div>
                 <Data/>
-                {/* <div className='flex flex-col md:flex-row md:w-full'>
-                    <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow md:w-3/5'>
-                        <Data/>
-                    </div>
-                    <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow'>
-                        hey
-                    </div>
-                </div> */}
             </div>
         </div>
+    </BalanceProvider>
     )
 }

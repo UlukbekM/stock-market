@@ -18,7 +18,7 @@ export default function RootLayout({
                 <link rel="shortcut icon" href="/favicon.ico" />
             </head>
             <body>
-                <main className="min-h-screen bg-background flex flex-col items-center">
+                <main className="min-h-screen bg-background flex flex-col items-center ">
                     {children}
                 </main>
             </body>
