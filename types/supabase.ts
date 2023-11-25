@@ -41,6 +41,7 @@ export interface Database {
           {
             foreignKeyName: "profiles_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -72,6 +73,36 @@ export interface Database {
           {
             foreignKeyName: "stock_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      "User Value": {
+        Row: {
+          date: string
+          id: string
+          user_id: string | null
+          value: number | null
+        }
+        Insert: {
+          date?: string
+          id?: string
+          user_id?: string | null
+          value?: number | null
+        }
+        Update: {
+          date?: string
+          id?: string
+          user_id?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "User Value_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
