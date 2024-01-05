@@ -21,6 +21,7 @@ export default function RootLayout({
                 <main className="min-h-screen bg-background flex flex-col items-center ">
                     {children}
                 </main>
+                <script src="./node_modules/preline/dist/preline.js"></script>
             </body>
         </html>
     )

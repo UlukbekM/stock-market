@@ -1,5 +1,6 @@
-import { BalanceProvider } from './BalanceProvider'
+// import { BalanceProvider } from './BalanceProvider'
 import Dashboard from './Dashboard'
+import { Providers } from '../GlobalRedux/provider'
 
 export default async function page() {
     // https://www.alphavantage.co/ STOCK API
@@ -7,8 +8,10 @@ export default async function page() {
     // https://site.financialmodelingprep.com/developer/docs
 
     return(
-        <BalanceProvider>
-            <Dashboard/>
-        </BalanceProvider>
+        <Providers>
+            {/* <BalanceProvider> */}
+                <Dashboard/>
+            {/* </BalanceProvider> */}
+        </Providers>
     )
 }
