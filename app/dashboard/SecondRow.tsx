@@ -326,15 +326,18 @@ export default function SecondRow() {
     }, [stock])
 
     useEffect(() => {
-        if(transaction) {
+        if(transaction !== "") {
             console.log('transaction has been made')
-            if(user_id) {
-                getStocks(user_id, balance)
-            }
-            dispatch(setTransaction(false))
+            // if(user_id) {
+            //     getStocks(user_id, balance)
+            // }
+            dispatch(setTransaction(""))
         }
     }, [transaction])
 
+    function testAlert () {
+        dispatch(setTransaction("test"))
+    }
 
     return (
         <div className='flex flex-col md:flex-row'>
@@ -345,9 +348,11 @@ export default function SecondRow() {
                     </h1>
                 </div>
 
+                {/* <button onClick={()=> testAlert()}>test</button> */}
+
                 <div className="overflow-auto w-full max-h-80 ">
                     <table className="table">
-                        <thead className='sticky top-0 z-10 bg-[#202C2D]'>
+                        <thead className='sticky top-0 z-8 bg-[#202C2D]'>
                             <tr className='h-auto'>
                                 <th className='hidden md:block'></th>
                                 <th className='px-1 basis-1/4'>

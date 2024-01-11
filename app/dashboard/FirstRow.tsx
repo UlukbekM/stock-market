@@ -55,7 +55,7 @@ export default function FirstRow () {
 
     return(
         <div className='flex flex-col md:flex-row'>
-            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 flex-grow max-w-1/2">
+            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 flex-grow max-w-1/2 mt-16 md:mt-2">
                 <div className='font-bold'>
                     <h1 className=''>
                         User value:

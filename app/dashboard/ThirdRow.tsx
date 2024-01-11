@@ -242,7 +242,10 @@ export default function ThirdRow () {
                     } else {
                         console.log('Balance updated successfully');
                         dispatch(setBalance(balance - dollars));
-                        dispatch(setTransaction(true))
+                        let message = ""
+                        if(shares === 1) message = " share of "
+                        else message = " shares of "
+                        dispatch(setTransaction("Purchased " + shares + message + display.toUpperCase() + " for $" + dollars))
                     }
                 }
             } else {
@@ -328,7 +331,10 @@ export default function ThirdRow () {
                     } else {
                         console.log('Balance updated successfully:', profileData);
                         dispatch(setBalance(balance+dollars))
-                        dispatch(setTransaction(true))
+                        let message = ""
+                        if(shares === 1) message = " share of "
+                        else message = " shares of "
+                        dispatch(setTransaction("Sold " + shares + message + display.toUpperCase() + " for $" + dollars))
                     }
                 }
             } else {
@@ -356,7 +362,7 @@ export default function ThirdRow () {
                             <button onClick={()=>fetchStock()} className="btn btn-primary my-auto">Search</button>
                         </div>
                         {display && 
-                            <div className='md:basis-6/8 m-auto flex w-full justify-center'>
+                            <div className='md:basis-6/8 m-auto flex w-full justify-center my-3'>
                                     <div className='my-auto flex md:mx-3'>
                                         <p className='my-auto'>STOCK: </p>
                                         <p className='text-xl md:text-3xl font-bold px-3'>{display}</p>

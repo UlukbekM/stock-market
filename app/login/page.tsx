@@ -8,8 +8,8 @@ import Link from "next/link"
 export default function register() {
     return(
         <div className="flex justify-center items-center min-h-screen w-screen bg-gradient-to-br from-green-300 via-blue-500 to-purple-600">
-            <div className="bg-white p-8 rounded border border-gray-300 shadow-md lg:w-1/4">
-                <Link href={"/"} className="text-black hover:text-gray-600 focus:outline-none my-6">
+            <div className="bg-white p-8 rounded border border-gray-300 shadow-md lg:w-1/4 text-black">
+                <Link href={"/"} className=" hover:text-gray-600 focus:outline-none my-6">
                     Back
                 </Link>
                 <h2 className="text-3xl font-semibold mb-8">Login</h2>
