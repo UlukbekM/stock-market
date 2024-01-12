@@ -328,9 +328,9 @@ export default function SecondRow() {
     useEffect(() => {
         if(transaction !== "") {
             console.log('transaction has been made')
-            // if(user_id) {
-            //     getStocks(user_id, balance)
-            // }
+            if(user_id) {
+                getStocks(user_id, balance)
+            }
             dispatch(setTransaction(""))
         }
     }, [transaction])
