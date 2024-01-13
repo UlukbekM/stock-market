@@ -7,6 +7,7 @@ import MobileHeader from '../MobileHeader/MobileHeader';
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from '@/types/supabase'
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
     const supabase = createClientComponentClient<Database>()
@@ -14,16 +15,22 @@ export default function Dashboard() {
     const [imagePath,setImagePath] = useState<string>("")
     const [email,setEmail] = useState<string>("")
     const [userId,setUserId] = useState<string>("")
+    const [username, setUsername] = useState<string>("")
+    const [newUsername, setNewUsername] = useState<string>("")
+    const { push } = useRouter();
 
     useEffect(() => {
         getUser()
     }, [])
 
-
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setImage(e.target.files[0]);
         }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewUsername(e.target.value);
     };
 
     const handleUpload = async () => {
@@ -51,11 +58,22 @@ export default function Dashboard() {
         } catch (error) {
             console.error('Error uploading image:', error);
         }
+        setImage(null)
     };
 
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
-        if(user?.email) {
+        console.log(user)
+
+        if(user && user.email) {
+            const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id);
+            // console.log(data)
+            if(data && data[0].username) {
+                setUsername(data[0].username)
+            }
             setUserId(user.id)
             setEmail(user.email)
             getImage(user.id)
@@ -72,11 +90,90 @@ export default function Dashboard() {
         })
 
         if(data) {
-            // console.log(data)
-            setImagePath(data[0].name)
+            if(data[0].name === ".emptyFolderPlaceholder") {
+                setImagePath(data[1].name)
+            } else{
+                setImagePath(data[0].name)
+            }
         } else {
             console.log(error)
         }
+    }
+
+    const updateUser = async () => {
+        if(newUsername) {
+            const { data, error } = await supabase
+            .from('profiles')
+            .update({ username: newUsername })
+            .eq('id', userId)
+            .select()
+    
+            if(data) {
+                setUsername(newUsername)
+                setNewUsername("")
+            } else {
+                console.log(error)
+            }
+            
+        }
+    }
+
+    const openModal = () => { 
+        const modalElement = document.getElementById('my_modal_1') as HTMLDialogElement | null;
+        modalElement?.show();
+    }
+
+    const deleteUserValue = async () => {
+        let { data: user, error } = await supabase
+        .from('User Value')
+        .select('*')
+        .eq('user_id', userId)
+
+        if(user) {
+            const rowIds = user.map((userData) => userData.id);
+
+            const { data, error } = await supabase
+                .from('User Value')
+                .delete()
+                .in('id', rowIds);
+                if(error) {
+                    console.log(error)
+                    return
+                }
+        }
+    }
+
+    const deleteUserStocks = async () => {
+        let { data: user, error } = await supabase
+        .from('stock')
+        .select('*')
+        .eq('user_id', userId)
+
+        if(user) {
+            const rowIds = user.map((userData) => userData.id);
+
+            const { data, error } = await supabase
+                .from('stock')
+                .delete()
+                .in('id', rowIds);
+                if(error) {
+                    console.log(error)
+                    return
+                }
+        }
+    }
+
+    const restartAccount = async () => {
+        deleteUserValue()
+        deleteUserStocks()
+        const { error } = await supabase
+        .from('profiles')
+        .update({ balance: 1000 })
+        .eq('id', userId)
+
+        const modalElement = document.getElementById('my_modal_1') as HTMLDialogElement | null;
+        modalElement?.close();
+        push('/dashboard');
     }
 
     return(
@@ -115,19 +212,73 @@ export default function Dashboard() {
                     Settings
                 </h1>
 
-                <div className="m-5">
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                    <button onClick={handleUpload}>Upload Image</button>
-                </div>
-
-                {imagePath && 
-                <div className="avatar">
-                    <div className="w-20 rounded-full">
-                        <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imagePath}`} />
+                <div className="flex items-center flex-col">
+                    <h1 className="text-xl">Account Details</h1>
+                    <div className="flex">
+                        {imagePath ? 
+                            <div className="avatar m-3">
+                                <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imagePath}`} />
+                                </div>
+                            </div>
+                            :
+                            <div className="avatar placeholder m-3">
+                                <div className="bg-primary text-neutral-content rounded-full w-24 ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <span className="text-3xl">A</span>
+                                </div>
+                            </div> 
+                        }
+                        
+                        <div className="flex flex-col m-3">
+                            <h1 className="text-2xl m-2">Avatar</h1>
+                            <div className="flex">
+                                {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
+                                <input type="file" className="file-input file-input-bordered w-full max-w-xs mx-2" accept="image/jpeg, image/png" onChange={handleImageChange} />
+                                <button className="btn btn-active btn-primary mx-2" onClick={handleUpload} disabled={!image}>Upload</button>
+                                {/* <button onClick={handleUpload}>Upload Image</button> */}
+                            </div>
+                        </div>
                     </div>
+
+                    <h1 className="text-xl mt-5 mb-2">Personal Details</h1>
+                    <div className="flex flex-col my-2">
+                        <div className="flex flex-col">
+                            <div className="label">
+                                {/* <span className="label-text">Username</span> */}
+                                Username
+                            </div>
+                            <div className="flex">
+                                <input type="text" placeholder={username} className="input input-bordered w-full max-w-xs" value={newUsername} onChange={handleInputChange} maxLength={15}/>
+                                <button className="btn btn-active btn-primary mx-2 my-auto" onClick={updateUser} disabled={newUsername.length < 3}>Save</button>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-col my-2">
+                            <div className="label">
+                                {/* <span className="label-text">Email</span> */}
+                                Email Address
+                            </div>
+                            <div className="flex">
+                                <input type="text" placeholder={email} className="input input-bordered w-full max-w-xs" disabled/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button className="btn  mx-2 my-auto" onClick={()=>openModal()}>Restart Account</button>
+                    <dialog id="my_modal_1" className="modal">
+                        <div className="modal-box">
+                            <h3 className="font-bold text-lg">Please confirm</h3>
+                            <p className="py-4">Are you sure you want to restart your account?</p>
+                            <p className="py-4">This action cannot be reverted.</p>
+                            <div className="modal-action flex justify-between">
+                                <button className="btn btn-warning" onClick={()=>restartAccount()}>Confirm</button>
+                                <form method="dialog">
+                                    <button className="btn ">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </dialog>
                 </div>
-                // <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imagePath}`}/>
-                }
             </div>
         </div>
     </div>

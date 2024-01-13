@@ -17,8 +17,8 @@ export default function MobileHeader () {
                 document.body.style.overflow = 'hidden'
             }
             return !status
-            })
-        }
+        })
+    }
 
     return(
     <div className="md:hidden">

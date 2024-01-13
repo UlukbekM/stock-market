@@ -57,8 +57,13 @@ export default function FirstRow () {
                 column: 'name', order: 'asc'
             }
         })
+
         if(data) {
-            setImageUrl(data[0].name)
+            if(data[0].name === ".emptyFolderPlaceholder") {
+                setImageUrl(data[1].name)
+            } else{
+                setImageUrl(data[0].name)
+            }
         } else {
             console.log(error)
         }
@@ -99,13 +104,13 @@ export default function FirstRow () {
                 <div className='flex'>
                     {imageUrl ? 
                     <div className="avatar">
-                        <div className="w-14 rounded-full">
+                        <div className="w-14 rounded-full ring-primary ring-offset-base-100 ring-offset-2">
                             <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imageUrl}`} />
                         </div>
                     </div>
                     :
                     <div className="avatar placeholder">
-                        <div className="bg-primary text-neutral-content rounded-full w-14">
+                        <div className="bg-primary text-neutral-content rounded-full w-14 ring-primary ring-offset-base-100 ring-offset-2">
                             <span className="text-3xl">D</span>
                         </div>
                     </div> 
@@ -118,7 +123,7 @@ export default function FirstRow () {
 
                 <div>
                     Available Balance:
-                    <div className='font-bold text-2xl'>
+                    <div className='font-bold text-3xl'>
                         ${balance.toFixed(2)}
                     </div>
                 </div>
