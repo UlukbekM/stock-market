@@ -129,10 +129,29 @@ export default function SecondRow() {
         .from('stock')
         .select('*')
         .eq('user_id', id);
-        if (stock) {
+        if (stock && stock?.length>0) {
             setStocks(stock);
-            // console.log(stock)
+            console.log(stock)
             getPrices(stock, balance, id)
+        } else {
+            // console.log('no stocks')
+            setStocks([
+                {
+                    id: '1',
+                    user_id: '1',
+                    symbol: 'NONE',
+                    amount: 1,
+                    price: 0,
+                    real_price: 0,
+                },
+            ]);
+
+            setSymbolAndPrices([
+                {
+                    symbol: 'NONE',
+                    price: 0,
+                },
+            ]);
         }
     }
 
@@ -341,7 +360,7 @@ export default function SecondRow() {
 
     return (
         <div className='flex flex-col md:flex-row'>
-            <div className='rounded-lg bg-[#202C2D] flex p-3 flex-col m-2 flex-grow'>
+            <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow basis-2/3'>
                 <div className='font-bold'>
                     <h1 className='text-3xl'>
                         Stocks
@@ -414,7 +433,13 @@ export default function SecondRow() {
             
             </div>
 
-            <div className='rounded-lg bg-[#202C2D] flex p-5 md:flex-row m-2 flex-grow justify-center items-center'>
+            <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow basis-1/3'>
+                <div className='font-bold'>
+                    <h1 className='text-3xl'>
+                        Portfolio
+                    </h1>
+                </div>
+                
                 {stocks !== null && <StockPieChart stockData={stocks} symbolAndPricesData={symbolAndPrices} />}
             </div>
         </div>

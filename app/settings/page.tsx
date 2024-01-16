@@ -23,14 +23,14 @@ export default function Dashboard() {
         getUser()
     }, [])
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewUsername(e.target.value);
+    };
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setImage(e.target.files[0]);
         }
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewUsername(e.target.value);
     };
 
     const handleUpload = async () => {
@@ -57,8 +57,13 @@ export default function Dashboard() {
             }
         } catch (error) {
             console.error('Error uploading image:', error);
+        } finally {
+            setImage(null)
+            const fileInput = document.querySelector('.file-input') as HTMLInputElement;
+            if (fileInput) {
+                fileInput.value = '';
+            }
         }
-        setImage(null)
     };
 
     const getUser = async () => {
@@ -81,17 +86,13 @@ export default function Dashboard() {
     }
 
     const getImage = async (id:string) => {
-        const { data, error } = await supabase.storage.from('profile').list(id + '/', {
-            limit: 10,
-            offset: 0, 
-            sortBy: {
-                column: 'name', order: 'asc'
-            }
-        })
+        const { data, error } = await supabase.storage.from('profile').list(id + '/');
 
         if(data) {
             if(data[0].name === ".emptyFolderPlaceholder") {
-                setImagePath(data[1].name)
+                if(data[1]) {
+                    setImagePath(data[1].name)
+                }
             } else{
                 setImagePath(data[0].name)
             }
@@ -177,7 +178,7 @@ export default function Dashboard() {
     }
 
     return(
-    <div className="flex flex-row bg-[#1B2627] w-full text-white h-full">
+    <div className="flex flex-row bg-[#1B2627] w-full text-white h-full min-h-screen">
         <MobileHeader/>
         <div className='hidden lg:flex flex-col p-2 justify-between h-screen sticky top-0'>
             <div>
@@ -206,15 +207,15 @@ export default function Dashboard() {
         </div>
 
 
-        <div className='flex-1 p-3 flex flex-col   mt-16 md:mt-0'>
-            <div className="bg-secondary p-5 rounded-lg m-2 flex-grow flex flex-col">
-                <h1 className='text-3xl font-bold'>
+        <div className='p-3 flex flex-col mt-16 md:mt-0 flex-1'>
+            <div className="bg-secondary p-5 rounded-lg m-2 flex flex-col md:flex-grow">
+                <h1 className='text-3xl font-bold my-2'>
                     Settings
                 </h1>
 
                 <div className="flex items-center flex-col">
-                    <h1 className="text-xl">Account Details</h1>
-                    <div className="flex">
+                    <h1 className="text-xl my-3">Account Details</h1>
+                    <div className="flex items-center">
                         {imagePath ? 
                             <div className="avatar m-3">
                                 <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -224,23 +225,23 @@ export default function Dashboard() {
                             :
                             <div className="avatar placeholder m-3">
                                 <div className="bg-primary text-neutral-content rounded-full w-24 ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <span className="text-3xl">A</span>
+                                    <span className="text-3xl">{username[0]}</span>
                                 </div>
                             </div> 
                         }
                         
                         <div className="flex flex-col m-3">
                             <h1 className="text-2xl m-2">Avatar</h1>
-                            <div className="flex">
+                            <div className="flex flex-col md:flex-row">
                                 {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
-                                <input type="file" className="file-input file-input-bordered w-full max-w-xs mx-2" accept="image/jpeg, image/png" onChange={handleImageChange} />
-                                <button className="btn btn-active btn-primary mx-2" onClick={handleUpload} disabled={!image}>Upload</button>
+                                <input type="file" className="file-input file-input-bordered w-full max-w-xs m-2" accept="image/jpeg, image/png" onChange={handleImageChange} />
+                                <button className="btn btn-active btn-primary m-2" onClick={handleUpload} disabled={!image}>Upload</button>
                                 {/* <button onClick={handleUpload}>Upload Image</button> */}
                             </div>
                         </div>
                     </div>
 
-                    <h1 className="text-xl mt-5 mb-2">Personal Details</h1>
+                    <h1 className="text-xl my-3">Personal Details</h1>
                     <div className="flex flex-col my-2">
                         <div className="flex flex-col">
                             <div className="label">

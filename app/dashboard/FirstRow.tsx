@@ -22,6 +22,7 @@ export default function FirstRow () {
     const balance = useSelector((state:RootState) => state.counter.balance)
     const [userValues,setUserValues] = useState<userValue[]>([])
     const [imageUrl, setImageUrl] = useState<string>("")
+    const [username, setUsername] = useState<string>("user")
 
     useEffect(() => {
         getUser()
@@ -30,9 +31,22 @@ export default function FirstRow () {
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if(user) {
+            console.log(user)
             getStocks(user.id)
             getImage(user.id)
+            getUsername(user.id)
         }
+    }
+
+    const getUsername = async (id:string) => {
+            const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', id);
+            // console.log(data)
+            if(data && data[0].username) {
+                setUsername(data[0].username)
+            }
     }
 
     const getStocks = async (user_id:string) => {
@@ -50,17 +64,14 @@ export default function FirstRow () {
     }
 
     const getImage = async (id:string) => {
-        const { data, error } = await supabase.storage.from('profile').list(id + '/', {
-            limit: 10,
-            offset: 0, 
-            sortBy: {
-                column: 'name', order: 'asc'
-            }
-        })
+        const { data, error } = await supabase.storage.from('profile').list(id + '/');
 
         if(data) {
+            console.log(data)
             if(data[0].name === ".emptyFolderPlaceholder") {
-                setImageUrl(data[1].name)
+                if(data[1]) {
+                    setImageUrl(data[1].name)
+                }
             } else{
                 setImageUrl(data[0].name)
             }
@@ -80,7 +91,7 @@ export default function FirstRow () {
 
     return(
         <div className='flex flex-col md:flex-row'>
-            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 flex-grow max-w-1/2 mt-16 md:mt-2">
+            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 max-w-1/2 mt-16 md:mt-2 basis-4/5">
                 <div className='font-bold'>
                     <h1 className=''>
                         User value:
@@ -89,7 +100,7 @@ export default function FirstRow () {
                         <h1 className='text-3xl'>
                             $
                         </h1>
-                        <h1 className='text-3xl '>
+                        <h1 className='text-3xl tracking-wider'>
                             {value}
                         </h1>
                     </div>
@@ -100,30 +111,30 @@ export default function FirstRow () {
                 </div>
             </div>
 
-            <div className='p-5 rounded-lg bg-[#202C2D] m-2 flex-grow'>
-                <div className='flex'>
+            <div className='p-5 rounded-lg bg-[#202C2D] m-2 basis-1/5'>
+                <div className='flex w-full my-3'>
                     {imageUrl ? 
-                    <div className="avatar">
-                        <div className="w-14 rounded-full ring-primary ring-offset-base-100 ring-offset-2">
+                    <div className="avatar basis-1/4">
+                        <div className="w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                             <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imageUrl}`} />
                         </div>
                     </div>
                     :
-                    <div className="avatar placeholder">
-                        <div className="bg-primary text-neutral-content rounded-full w-14 ring-primary ring-offset-base-100 ring-offset-2">
-                            <span className="text-3xl">D</span>
+                    <div className="avatar placeholder basis-1/4">
+                        <div className="bg-primary text-neutral-content rounded-full w-14 ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <span className="text-3xl">{username[0]}</span>
                         </div>
                     </div> 
                     }
-                    <div className='my-auto mx-3'>
-                        email
+                    <div className='my-auto mx-3 basis-3/4 text-xl'>
+                        {username}
                     </div>
                     {/* {session?.user.email} */}
                 </div>
 
                 <div>
                     Available Balance:
-                    <div className='font-bold text-3xl'>
+                    <div className='font-bold text-3xl tracking-wider'>
                         ${balance.toFixed(2)}
                     </div>
                 </div>
