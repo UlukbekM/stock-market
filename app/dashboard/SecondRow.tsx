@@ -135,23 +135,34 @@ export default function SecondRow() {
             getPrices(stock, balance, id)
         } else {
             // console.log('no stocks')
-            setStocks([
-                {
-                    id: '1',
-                    user_id: '1',
-                    symbol: 'NONE',
-                    amount: 1,
-                    price: 0,
-                    real_price: 0,
-                },
-            ]);
 
             setSymbolAndPrices([
                 {
-                    symbol: 'NONE',
-                    price: 0,
+                "symbol": "No stocks",
+                "price": 1
                 },
             ]);
+            // {
+            //     "id": "8e051b59-d69f-4aaf-8c1d-ff8eadbfd168",
+            //     "symbol": "AA",
+            //     "amount": 22,
+            //     "price": 27.36,
+            //     "user_id": "fccdde01-93e6-49af-b73a-ac5ee63c4610"
+            // }
+            // {
+            //     "symbol": "AA",
+            //     "price": 27.36
+            // }
+            setStocks([
+                {
+                "id": "",
+                "symbol": "EMPTY",
+                "amount": 1,
+                "price": 1,
+                "user_id": ""
+                },
+            ]);
+            recordValue(0,balance,id)
         }
     }
 
@@ -172,6 +183,7 @@ export default function SecondRow() {
                     price: Number(item.price),
                 }));
                 setSymbolAndPrices(stockData);
+                console.log(stockData)
                 combineStockItems(stock, stockData)
                 calculateValue(stockData,stock,balance,user_id)
                 // localStorage.setItem('apiData', JSON.stringify(stockData));          /////////////SAVE   STOCK PRICES////////////
@@ -233,7 +245,6 @@ export default function SecondRow() {
         const storedDate = localStorage.getItem('savedDate');
 
         if (storedDate) {
-            console.log('date logged!')
             const savedTimestamp = new Date(storedDate).getTime();
             const currentTimestamp = new Date().getTime();
             const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -241,11 +252,7 @@ export default function SecondRow() {
             if (currentTimestamp - savedTimestamp >= twentyFourHoursInMilliseconds) {
                 // More than a day has passed, remove the date, run your function, and save a new date
                 localStorage.removeItem('savedDate');
-                
-                
-                iterateLocalStorage()   //POSSIBLY WRITE FUNCTION THAT RUNS THIS AFTER CLOSING TIME
-
-
+                iterateLocalStorage()
                 // Call your function here
                 recordValue(value,balance,user_id);
             }
@@ -339,14 +346,14 @@ export default function SecondRow() {
 
     useEffect(() => {
         if(stock !== "") {
-            console.log('changed selected to:' + stock)
+            // console.log('changed selected to:' + stock)
             setSelectedRow(stock)
         }
     }, [stock])
 
     useEffect(() => {
         if(transaction !== "") {
-            console.log('transaction has been made')
+            // console.log('transaction has been made')
             if(user_id) {
                 getStocks(user_id, balance)
             }
@@ -359,7 +366,7 @@ export default function SecondRow() {
     }
 
     return (
-        <div className='flex flex-col md:flex-row'>
+        <div className='flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap'>
             <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow basis-2/3'>
                 <div className='font-bold'>
                     <h1 className='text-3xl'>
@@ -367,10 +374,8 @@ export default function SecondRow() {
                     </h1>
                 </div>
 
-                {/* <button onClick={()=> testAlert()}>test</button> */}
-
-                <div className="overflow-auto w-full max-h-80 ">
-                    <table className="table">
+                <div className="w-full max-h-80 h-full">
+                    <table className="table overflow-auto ">
                         <thead className='sticky top-0 z-8 bg-[#202C2D]'>
                             <tr className='h-auto'>
                                 <th className='hidden md:block'></th>
@@ -428,6 +433,8 @@ export default function SecondRow() {
                                     </tr>)
                             })}
                         </tbody>
+                    
+
                     </table>
                 </div>
             

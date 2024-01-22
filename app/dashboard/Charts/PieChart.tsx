@@ -30,15 +30,46 @@ const StockPieChart: React.FC<StockChartProps> = ({ stockData, symbolAndPricesDa
 
         if (chartContainerRef.current) {
             const ctx = chartContainerRef.current.getContext('2d');
-            
+
             if (ctx) {
                 if (stockData && symbolAndPricesData && stockData.length > 0 && symbolAndPricesData.length > 0) {
-                    // Your existing logic for processing data and creating the pie chart
+                    const symbols = symbolAndPricesData.map((data) => data.symbol);
+                    const prices = symbolAndPricesData.map((data) => data.price);
+
+                    mutableChartInstance = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: symbols,
+                            datasets: [{
+                                data: prices,
+                                backgroundColor: [
+                                    'rgba(178, 243, 95, 1)',
+                                    'rgba(255, 99, 132, 0.7)',
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 206, 86, 0.7)',
+                                    // Add more colors as needed
+                                ],
+                                borderColor: [
+                                    'rgba(178, 243, 95, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    
+                                    // Add more colors as needed
+                                ],
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        }
+                    });
                 } else {
                     // No data available, create a default whole circle dataset
                     const defaultData = [1]; // Represents a whole circle
                     const defaultColors = ['rgba(128, 128, 128, 0.7)']; // Set a color for the whole circle
-                    
+
                     mutableChartInstance = new Chart(ctx, {
                         type: 'pie',
                         data: {

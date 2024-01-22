@@ -207,7 +207,7 @@ export default function Dashboard() {
         </div>
 
 
-        <div className='p-3 flex flex-col mt-16 md:mt-0 flex-1'>
+        <div className='p-3 flex flex-col mt-16 lg:mt-0 flex-1'>
             <div className="bg-secondary p-5 rounded-lg m-2 flex flex-col md:flex-grow">
                 <h1 className='text-3xl font-bold my-2'>
                     Settings
@@ -219,7 +219,7 @@ export default function Dashboard() {
                         {imagePath ? 
                             <div className="avatar m-3">
                                 <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imagePath}`} />
+                                    <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE+imagePath} />
                                 </div>
                             </div>
                             :

@@ -31,7 +31,7 @@ export default function FirstRow () {
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if(user) {
-            console.log(user)
+            // console.log(user)
             getStocks(user.id)
             getImage(user.id)
             getUsername(user.id)
@@ -67,7 +67,7 @@ export default function FirstRow () {
         const { data, error } = await supabase.storage.from('profile').list(id + '/');
 
         if(data) {
-            console.log(data)
+            // console.log(data)
             if(data[0].name === ".emptyFolderPlaceholder") {
                 if(data[1]) {
                     setImageUrl(data[1].name)
@@ -91,7 +91,7 @@ export default function FirstRow () {
 
     return(
         <div className='flex flex-col md:flex-row'>
-            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 max-w-1/2 mt-16 md:mt-2 basis-4/5">
+            <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 lg:max-w-1/2 mt-16 lg:mt-2 basis-4/5 md:w-full">
                 <div className='font-bold'>
                     <h1 className=''>
                         User value:
@@ -111,28 +111,30 @@ export default function FirstRow () {
                 </div>
             </div>
 
-            <div className='p-5 rounded-lg bg-[#202C2D] m-2 basis-1/5'>
-                <div className='flex w-full my-3'>
+            <div className='p-5 rounded-lg bg-[#202C2D] m-2 basis-1/5 md:mt-16 lg:mt-2 flex justify-center flex-col items-center max-w-40'>
+                <div className='flex w-full my-3 flex-col items-center'>
                     {imageUrl ? 
-                    <div className="avatar basis-1/4">
-                        <div className="w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <img src={`https://yiunghnvgmuatnrhjxla.supabase.co/storage/v1/object/public/profile/fccdde01-93e6-49af-b73a-ac5ee63c4610/${imageUrl}`} />
+                        <div className="avatar basis-1/4 my-3">
+                            <div className="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE+imageUrl} />
+                            </div>
                         </div>
-                    </div>
-                    :
-                    <div className="avatar placeholder basis-1/4">
-                        <div className="bg-primary text-neutral-content rounded-full w-14 ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <span className="text-3xl">{username[0]}</span>
-                        </div>
-                    </div> 
+                        :
+                        <div className="avatar placeholder basis-1/4 my-3">
+                            <div className="bg-primary text-neutral-content rounded-full w-20 ring ring-primary ring-offset-base-100 ring-offset-2">
+                                <span className="text-3xl">{username[0]}</span>
+                            </div>
+                        </div> 
                     }
-                    <div className='my-auto mx-3 basis-3/4 text-xl'>
+                    {/* <div className="divider">OR</div> */}
+                    <div className='m-3 text-xl divider'>
                         {username}
                     </div>
                     {/* {session?.user.email} */}
                 </div>
 
-                <div>
+
+                <div className='flex items-center flex-col'>
                     Available Balance:
                     <div className='font-bold text-3xl tracking-wider'>
                         ${balance.toFixed(2)}

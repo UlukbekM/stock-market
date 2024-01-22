@@ -4,6 +4,7 @@ import StockChart from './Charts/StockChart';
 import axios from 'axios';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from '@/types/supabase'
+import { FaCircleInfo } from "react-icons/fa6";
 
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import type { RootState } from '../GlobalRedux/store';
@@ -40,6 +41,7 @@ export default function ThirdRow () {
     const [symbol, setSymbol] = useState<string>("")
     const [display, setDisplay] = useState<string>("")
     const [price, setPrice] = useState<number>(0)
+    const [priceDate,setPriceDate] = useState<string>("tooltip")
 
     // PURCHASE STOCK
     const [dollars,setDollars] = useState<number>(0)
@@ -166,12 +168,12 @@ export default function ThirdRow () {
             axios.get(apiUrl)
             .then((response) => {
                 const data = response.data;
-                
                 const formattedDatesArray = data.results.map((item:StockItem) => {
                     const date = new Date(item.t);
                     return date.toISOString().slice(0, 10);
                 });
                 setDates(formattedDatesArray)
+                setPriceDate(formattedDatesArray[formattedDatesArray.length-1])
                 
 
                 let currentTime = new Date().toISOString()
@@ -189,6 +191,8 @@ export default function ThirdRow () {
                 setDisplay(holder.toUpperCase())
                 setShares(0.00)
                 setDollars(0)
+
+                
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -356,7 +360,7 @@ export default function ThirdRow () {
                 <div className='flex flex-col'>
                     <div className='flex sm:flex-row flex-col'>
                         {/* <button onClick={() => fetchStock()}>test</button> */}
-                        <div className='md:basis-2/8 flex'>
+                        <div className='md:basis-2/8 flex my-3'>
                             <input value={symbol} onChange={(e) => setSymbol(e.target.value)} maxLength={4} className=' uppercase rounded-lg mx-4 my-2 bg-[#1b2627] text-[#748384] p-2 w-auto'/>
                             {/* <button onClick={()=>fetchStock()} className=' button block bg-[#B2F35F] hover:bg-[#8ec24c] text-black py-2 px-4 rounded-md my-2 font-semibold'>Search</button> */}
                             <button onClick={()=>fetchStock()} className="btn btn-primary my-auto">Search</button>
@@ -371,6 +375,9 @@ export default function ThirdRow () {
                                         <p className='my-auto'>PRICE: </p>
                                         <p className='text-xl md:text-3xl font-bold px-3'>{price}</p>
                                         <p className='my-auto'>USD</p>
+                                        <div className="tooltip mx-3 my-auto" data-tip={`Price based on closing price on ${priceDate}`}>
+                                            <FaCircleInfo/>
+                                        </div>
                                     </div>
                             </div>
                         }
