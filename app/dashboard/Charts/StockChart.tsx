@@ -3,17 +3,13 @@ import Chart from 'chart.js/auto';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 
-interface StockItem {
-    v: number; // volume
-    vw: number; // volume-weighted average price
-    o: number; // open price
-    c: number; // close price
-    h: number; // high price
-    // Add other properties if necessary
+interface StockAPI {
+    date: string;
+    close: number;
 }
 
 interface StockChartProps {
-    stockData: StockItem[] | null;
+    stockData: StockAPI[] | null;
     dates: string[];
 }
 
@@ -35,10 +31,9 @@ const StockChart: React.FC<StockChartProps> = ({ stockData, dates }) => {
         }
 
         if (chartRef.current && chartContainerRef.current && stockData) {
-            const closePrices: number[] = stockData.map((item: StockItem) => item.c);
-            const reversedDates = [...dates];
+            const closePrices: number[] = stockData.map((item: StockAPI) => item.close);
 
-            const formattedDates = convertToMMMDD(reversedDates);
+            const formattedDates = convertToMMMDD(dates);
 
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {

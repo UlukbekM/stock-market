@@ -22,6 +22,11 @@ interface StockItem {
     vw: number; // Volume weighted average price
 }
 
+interface StockAPI {
+    date: string;
+    close: number;
+}
+
 
 export default function ThirdRow () {
     const supabase = createClientComponentClient<Database>()
@@ -33,7 +38,7 @@ export default function ThirdRow () {
 
 
     // CHART
-    const [stockData, setStockData] = useState<StockItem[]>([]);
+    const [stockData, setStockData] = useState<StockAPI[]>([]);
     const [dates, setDates] = useState<string[]>([]);
     const [tempDates, setTempDates] = useState<string[]>([]);
 
@@ -118,96 +123,33 @@ export default function ThirdRow () {
         return `${year}-${month}-${day}`;
     }
 
-    const fetchStock = async (stock?: string, api?: number) => {
+    const fetchStock = async (stock?: string) => {
         let holder = symbol
         if(stock) {
             holder = stock
         }
 
-        // const savedDataString = localStorage.getItem(holder.toUpperCase());
-        const savedDataString = ""
-
         const [to,a,b,c,from] = getLastWeekdays();
+        
+        if (holder !== "") {
+            const apiurl = `https://financialmodelingprep.com/api/v3/historical-price-full/${holder.toUpperCase()}?from=${from}&to=${to}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
 
-        if (savedDataString) {
-            const savedData = JSON.parse(savedDataString);
-            const { results, currentTime } = savedData;
-            
-            let oldTime = new Date(currentTime)
-            let newTime = new Date();
-            const timeDifference = newTime.getTime() - oldTime.getTime();
-            const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-            if (timeDifference > oneDayInMilliseconds) {
-                localStorage.removeItem(holder.toUpperCase());
-                fetchStock(holder)
-                console.log('getting new price')
-            } else {
-                
-                setPrice(results[results.length-1]["c"])
-                const formattedDatesArray = results.map((item:StockItem) => {
-                    const date = new Date(item.t);
-                    return date.toISOString().slice(0, 10);
-                });
-                setDates(formattedDatesArray)
-                setStockData(results)
-
-                setDisplay(holder.toUpperCase())
-                setShares(0.00)
-                setDollars(0)
-            }
-        } else if (holder !== "") {
-            console.log('called')
-            let apiKey = process.env.NEXT_PUBLIC_POLYGON_API_KEY;
-            if(api === 2) {
-                apiKey = process.env.NEXT_PUBLIC_POLYGON_SECOND_API_KEY
-            } else if(api === 3) {
-                apiKey = process.env.NEXT_PUBLIC_POLYGON_THIRD_API_KEY
-            }
-
-            const apiUrl = `https://api.polygon.io/v2/aggs/ticker/${holder.toUpperCase()}/range/1/day/${from}/${to}?adjusted=true&sort=asc&limit=120&apiKey=${apiKey}`
-            axios.get(apiUrl)
+            axios.get(apiurl)
             .then((response) => {
                 const data = response.data;
-                const formattedDatesArray = data.results.map((item:StockItem) => {
-                    const date = new Date(item.t);
-                    return date.toISOString().slice(0, 10);
-                });
-                setDates(formattedDatesArray)
-                setPriceDate(formattedDatesArray[formattedDatesArray.length-1])
-                
+                const newData = data.historical.slice().reverse();
 
-                let currentTime = new Date().toISOString()
-                const dataToSave = {
-                    results: data.results,
-                    currentTime,
-                };
-                const dataString = JSON.stringify(dataToSave);
-                localStorage.setItem(data.ticker, dataString);
-    
-                setStockData(data.results)
-                
-                setPrice(data.results[data.results.length-1]["c"])
-                console.log(data.results)
+                const dates = newData.map((item:StockAPI) => item.date)
+                setDates(dates)
+                setPriceDate(dates[dates.length-1])
+
+                setStockData(newData)
+                setPrice(newData[newData.length-1]["close"])
                 setDisplay(holder.toUpperCase())
+
                 setShares(0.00)
                 setDollars(0)
-
-                
             })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-    
-                if(api === undefined) {
-                    fetchStock(stock,2)
-                    console.log('second api')
-                } else if (api === 2) {
-                    fetchStock(stock,3)
-                    console.log('third api')
-                } else if(api === 3) {
-                    alert('reached api rate limit, please wait a minute')
-                    return
-                }
-            });
         }
         dispatch(setStock(stock? stock: symbol.toUpperCase()))
     }

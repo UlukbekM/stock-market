@@ -34,7 +34,7 @@ const StockPieChart: React.FC<StockChartProps> = ({ stockData, symbolAndPricesDa
             if (ctx) {
                 if (stockData && symbolAndPricesData && stockData.length > 0 && symbolAndPricesData.length > 0) {
                     const symbols = symbolAndPricesData.map((data) => data.symbol);
-                    const prices = symbolAndPricesData.map((data) => data.price);
+                    const prices = symbolAndPricesData.map((data) => data.price * (stockData.find(item => item.symbol === data.symbol)?.amount || 1));
 
                     mutableChartInstance = new Chart(ctx, {
                         type: 'pie',

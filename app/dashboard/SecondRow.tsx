@@ -131,7 +131,7 @@ export default function SecondRow() {
         .eq('user_id', id);
         if (stock && stock?.length>0) {
             setStocks(stock);
-            console.log(stock)
+            // console.log(stock)
             getPrices(stock, balance, id)
         } else {
             // console.log('no stocks')
@@ -142,17 +142,6 @@ export default function SecondRow() {
                 "price": 1
                 },
             ]);
-            // {
-            //     "id": "8e051b59-d69f-4aaf-8c1d-ff8eadbfd168",
-            //     "symbol": "AA",
-            //     "amount": 22,
-            //     "price": 27.36,
-            //     "user_id": "fccdde01-93e6-49af-b73a-ac5ee63c4610"
-            // }
-            // {
-            //     "symbol": "AA",
-            //     "price": 27.36
-            // }
             setStocks([
                 {
                 "id": "",
@@ -183,7 +172,7 @@ export default function SecondRow() {
                     price: Number(item.price),
                 }));
                 setSymbolAndPrices(stockData);
-                console.log(stockData)
+                // console.log(stockData)
                 combineStockItems(stock, stockData)
                 calculateValue(stockData,stock,balance,user_id)
                 // localStorage.setItem('apiData', JSON.stringify(stockData));          /////////////SAVE   STOCK PRICES////////////
