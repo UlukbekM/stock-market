@@ -18,10 +18,15 @@ const StockChart: React.FC<StockChartProps> = ({ stockData, dates }) => {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart | null>(null);
 
-    function convertToMMMDD(dates: string[]): string[] {
+    function convertToFormattedDates(dates: string[]): string[] {
         return dates.map((dateString) => {
-            const dateObject = new Date(`${dateString}T12:00:00`);
-            return format(dateObject, 'MMM dd', { locale: enUS });
+            if(dateString.length > 10) {
+                const dateObject = new Date(dateString);
+                return format(dateObject, 'HH:mm', { locale: enUS });
+            } else {
+                const dateObject = new Date(`${dateString}T12:00:00`);
+                return format(dateObject, 'MMM dd', { locale: enUS });
+            }
         });
     }
 
@@ -33,7 +38,7 @@ const StockChart: React.FC<StockChartProps> = ({ stockData, dates }) => {
         if (chartRef.current && chartContainerRef.current && stockData) {
             const closePrices: number[] = stockData.map((item: StockAPI) => item.close);
 
-            const formattedDates = convertToMMMDD(dates);
+            const formattedDates = convertToFormattedDates(dates);
 
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
@@ -99,7 +104,7 @@ const StockChart: React.FC<StockChartProps> = ({ stockData, dates }) => {
     }, [stockData, dates]);
 
     return (
-        <div ref={chartContainerRef} className="max-w-full overflow-x-auto h-80">
+        <div ref={chartContainerRef} className="max-w-full overflow-x-auto h-80 my-2">
             <canvas ref={chartRef}></canvas>
         </div>
     );

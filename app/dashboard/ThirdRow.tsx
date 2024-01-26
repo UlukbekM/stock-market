@@ -9,6 +9,7 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import type { RootState } from '../GlobalRedux/store';
 import { setBalance, setStock, setTransaction } from '../GlobalRedux/Features/counter/counterSlice';
+import { setFips } from 'crypto';
 
 
 interface StockItem {
@@ -40,7 +41,8 @@ export default function ThirdRow () {
     // CHART
     const [stockData, setStockData] = useState<StockAPI[]>([]);
     const [dates, setDates] = useState<string[]>([]);
-    const [tempDates, setTempDates] = useState<string[]>([]);
+    // const [tempDates, setTempDates] = useState<string[]>([]);
+    const [chartDates, setChartDates] = useState<string>("")
 
     // TICKER
     const [symbol, setSymbol] = useState<string>("")
@@ -53,6 +55,24 @@ export default function ThirdRow () {
     const [shares,setShares] = useState<number>(0)
     const [buysell, setBuySell] = useState<boolean>(false)
     const [selectedValue, setSelectedValue] = useState<string>('Dollars');
+
+    //RANGE
+    const [range, setRange] = useState<string>("1D")
+    const [first,setFirst] = useState<StockAPI[]>()     //1D
+    const [second,setSecond] = useState<StockAPI[]>()   //5D
+    const [third,setThird] = useState<StockAPI[]>()     //1M
+    const [fourth,setFourth] = useState<StockAPI[]>()   //6M
+    const [fifth,setFifth] = useState<StockAPI[]>()     //YTD
+    const [sixth,setSixth] = useState<StockAPI[]>()     //1Y
+    const [seventh,setSeventh] = useState<StockAPI[]>() //5Y
+    // const [eight,setEighth] = useState()    //Max
+    const [start,setStart] = useState<string>("")
+    const [end,setEnd] = useState<string>("")
+
+    
+    useEffect(() => {
+        get1D()
+    }, [])
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedValue(event.target.value);
@@ -129,15 +149,23 @@ export default function ThirdRow () {
             holder = stock
         }
 
-        const [to,a,b,c,from] = getLastWeekdays();
-        
-        if (holder !== "") {
-            const apiurl = `https://financialmodelingprep.com/api/v3/historical-price-full/${holder.toUpperCase()}?from=${from}&to=${to}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+        if (holder !== "" && start && end) {
+            let apiurl = `https://financialmodelingprep.com/api/v3/historical-price-full/${holder.toUpperCase()}?from=${start}&to=${end}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+
+            if(range === "1D") {
+                apiurl = `https://financialmodelingprep.com/api/v3/historical-chart/15min/${holder.toUpperCase()}?from=${start}&to=${end}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            }
 
             axios.get(apiurl)
             .then((response) => {
                 const data = response.data;
-                const newData = data.historical.slice().reverse();
+                let newData
+
+                if(range === "1D") {
+                    newData = data.slice().reverse()
+                } else {
+                    newData = data.historical.slice().reverse();
+                }
 
                 const dates = newData.map((item:StockAPI) => item.date)
                 setDates(dates)
@@ -289,6 +317,122 @@ export default function ThirdRow () {
         }
     }
 
+    const changeRange = (item:string) => {
+        // console.log(item)
+        if(item !== range) {
+            setRange(item)
+            console.log('range changed to ' + item)
+            if(item === "1D") get1D()
+            else if(item === "5D") get5D()
+            else if(item === "1M") get1M()
+            else if(item === "6M") get6M()
+            else if(item === "YTD") getYTD()
+            else if(item === "1Y") get1Y()
+            else if(item === "5Y") get5Y()
+        }
+    }
+
+    const get1D = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+        setEnd(date)
+    }
+
+    const get5D = () => {
+        const today = new Date();
+        let daysToSubtract = 4;
+    
+        while (daysToSubtract > 0) {
+            today.setDate(today.getDate() - 1);
+    
+            // Skip weekends
+            if (today.getDay() !== 0 && today.getDay() !== 6) {
+                daysToSubtract--;
+            }
+        }
+    
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+    }
+
+    const get1M = () => {
+        const today = new Date();
+        const oneMonthAgo = new Date(today);
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+    
+        const year = oneMonthAgo.getFullYear();
+        const month = String(oneMonthAgo.getMonth() + 1).padStart(2, '0');
+        const day = String(oneMonthAgo.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+    }
+
+    const get6M = () => {
+        const today = new Date();
+        const sixMonthsAgo = new Date(today);
+        sixMonthsAgo.setMonth(today.getMonth() - 6);
+    
+        const year = sixMonthsAgo.getFullYear();
+        const month = String(sixMonthsAgo.getMonth() + 1).padStart(2, '0');
+        const day = String(sixMonthsAgo.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+    }
+
+    const getYTD = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        
+        // Set the date to January 1st of the current year
+        const firstDateOfYear = new Date(year, 0, 1);
+    
+        const yearFirstDate = new Date(firstDateOfYear);
+        const yearFirstDateYear = yearFirstDate.getFullYear();
+        const month = String(yearFirstDate.getMonth() + 1).padStart(2, '0');
+        const day = String(yearFirstDate.getDate()).padStart(2, '0');
+    
+        let date = yearFirstDateYear + "-" + month + "-" + day
+        // console.log(date)
+        setStart(date)
+    }
+
+    const get1Y = () => {
+        const today = new Date();
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+    
+        const year = oneYearAgo.getFullYear();
+        const month = String(oneYearAgo.getMonth() + 1).padStart(2, '0');
+        const day = String(oneYearAgo.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+    }
+
+    const get5Y = () => {
+        const today = new Date();
+        const fiveYearsAgo = new Date(today);
+        fiveYearsAgo.setFullYear(today.getFullYear() - 5);
+    
+        const year = fiveYearsAgo.getFullYear();
+        const month = String(fiveYearsAgo.getMonth() + 1).padStart(2, '0');
+        const day = String(fiveYearsAgo.getDate()).padStart(2, '0');
+    
+        let date = year + "-" + month + "-" + day
+        setStart(date)
+    }
+
     useEffect(() => {
         if(stock !== "" && stock !== symbol) {
             setSymbol(stock)
@@ -296,9 +440,15 @@ export default function ThirdRow () {
         }
     }, [stock])
 
+    useEffect(() => {
+        if(symbol) {
+            fetchStock(symbol)
+        }
+    }, [start])
+
     return(
         <div className='flex flex-col md:flex-row md:w-full'>
-            <div className='rounded-lg bg-[#202C2D] flex p-5 flex-col m-2 flex-grow md:w-3/5'>
+            <div className='rounded-lg bg-secondary flex p-5 flex-col m-2 flex-grow md:w-3/5'>
                 <div className='flex flex-col'>
                     <div className='flex sm:flex-row flex-col'>
                         {/* <button onClick={() => fetchStock()}>test</button> */}
@@ -323,6 +473,48 @@ export default function ThirdRow () {
                                     </div>
                             </div>
                         }
+                    </div>
+                    <div className="join mx-2 w-full flex">
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "1D" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("1D")}>
+                            1D
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "5D" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("5D")}>
+                            5D
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "1M" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("1M")}>
+                            1M
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "6M" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("6M")}>
+                            6M
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "YTD" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("YTD")}>
+                            YTD
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "1Y" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("1Y")}>
+                            1Y
+                        </button>
+                        <button
+                            className={`my-2 mx-3 border-b-2 px-2 ${range === "5Y" ? "border-accent text-accent" : "border-secondary"}`}
+                            onClick={() => changeRange("5Y")}>
+                            5Y
+                        </button>
+                        {/* <button
+                            className={`my-2 mx-3 border-b-2 border-secondary ${range === "Max" ? "border-accent text-accent" : ""}`}
+                            onClick={() => changeRange("Max")}>
+                            Max
+                        </button> */}
                     </div>
                     <div>
                         {stockData !== null && <StockChart stockData={stockData} dates={dates}/>}
