@@ -171,6 +171,8 @@ export default function Dashboard() {
         .from('profiles')
         .update({ balance: 1000 })
         .eq('id', userId)
+        
+        localStorage.removeItem('savedDate');
 
         const modalElement = document.getElementById('my_modal_1') as HTMLDialogElement | null;
         modalElement?.close();

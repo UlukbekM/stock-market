@@ -10,6 +10,7 @@ export interface CounterState {
     ownStock: boolean;
     transaction: string;
     email: string;
+    newValue: boolean;
 }
 
 const initialState: CounterState = {
@@ -20,6 +21,7 @@ const initialState: CounterState = {
     ownStock: false,
     transaction: "",
     email: "",
+    newValue: false
 }
 
 export const counterSlice = createSlice({
@@ -52,10 +54,13 @@ export const counterSlice = createSlice({
         setTransaction: (state, action: PayloadAction<string>) => {
             state.transaction = action.payload;
         },
+        setNewValue: (state, action: PayloadAction<boolean>) => {
+            state.newValue = action.payload;
+        },
     }
 })
 
 
 
-export const {increment, decrement, incrementByAmount,setUserId,setBalance,setStock,setValue,setOwnStock,setTransaction,setEmail} = counterSlice.actions
+export const {increment, decrement, incrementByAmount,setUserId,setBalance,setStock,setValue,setOwnStock,setTransaction,setEmail,setNewValue} = counterSlice.actions
 export default counterSlice.reducer

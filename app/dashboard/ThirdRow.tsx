@@ -474,7 +474,7 @@ export default function ThirdRow () {
                             </div>
                         }
                     </div>
-                    <div className="join mx-2 w-full flex">
+                    <div className="join mx-2 w-full flex flex-wrap">
                         <button
                             className={`my-2 mx-3 border-b-2 px-2 ${range === "1D" ? "border-accent text-accent" : "border-secondary"}`}
                             onClick={() => changeRange("1D")}>

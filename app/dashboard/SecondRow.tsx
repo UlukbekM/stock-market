@@ -10,7 +10,7 @@ import { FaChevronUp } from "react-icons/fa6";
 
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import type { RootState } from '../GlobalRedux/store';
-import { setBalance, setStock, setUserId, setValue, setTransaction } from '../GlobalRedux/Features/counter/counterSlice';
+import { setBalance, setStock, setUserId, setValue, setTransaction, setNewValue } from '../GlobalRedux/Features/counter/counterSlice';
 
 interface StockItem {
     id: string;
@@ -269,7 +269,10 @@ export default function SecondRow() {
                         .from('User Value')
                         .insert([{ "value": total, user_id, date: todayFormatted }])
                         .select();
-                        if(data) return
+                        if(data) {
+                            dispatch(setNewValue(true))
+                            return
+                        }
                     // console.log(data)
                 }
             }

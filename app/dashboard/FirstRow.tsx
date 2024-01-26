@@ -8,7 +8,7 @@ import PortfolioChart from './Charts/PortfolioChart';
 
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import type { RootState } from '../GlobalRedux/store';
-import { setBalance, setStock } from '../GlobalRedux/Features/counter/counterSlice';
+import { setBalance, setNewValue, setStock, setUserId } from '../GlobalRedux/Features/counter/counterSlice';
 
 interface userValue {
     date: string,
@@ -20,18 +20,29 @@ export default function FirstRow () {
     const user_id = useSelector((state:RootState) => state.counter.user_id)
     const value = useSelector((state:RootState) => state.counter.value)
     const balance = useSelector((state:RootState) => state.counter.balance)
+    const newValue = useSelector((state:RootState) => state.counter.newValue)
     const [userValues,setUserValues] = useState<userValue[]>([])
     const [imageUrl, setImageUrl] = useState<string>("")
     const [username, setUsername] = useState<string>("user")
+    const dispatch = useDispatch()
 
     useEffect(() => {
         getUser()
     }, [])
 
+    useEffect(() => {
+        console.log('added value')
+        if(user_id && newValue) {
+            getStocks(user_id)
+            dispatch(setNewValue(false))
+        }
+    }, [newValue])
+
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if(user) {
             // console.log(user)
+            dispatch(setUserId(user.id))
             getStocks(user.id)
             getImage(user.id)
             getUsername(user.id)
