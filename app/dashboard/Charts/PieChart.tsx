@@ -43,19 +43,20 @@ const StockPieChart: React.FC<StockChartProps> = ({ stockData, symbolAndPricesDa
                             datasets: [{
                                 data: prices,
                                 backgroundColor: [
-                                    'rgba(178, 243, 95, 1)',
-                                    'rgba(255, 99, 132, 0.7)',
-                                    'rgba(54, 162, 235, 0.7)',
-                                    'rgba(255, 206, 86, 0.7)',
-                                    // Add more colors as needed
+                                    'rgba(178, 243, 95, 0.7)',
+                                    'rgba(84, 214, 127, 0.7)',
+                                    'rgba(0, 181, 148, 0.7)',
+                                    'rgba(0, 144, 148, 0.7)',
+                                    'rgba(0, 107, 126, 0.7)',
+                                    'rgba(47, 72, 88, 0.7)'
                                 ],
                                 borderColor: [
                                     'rgba(178, 243, 95, 1)',
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    
-                                    // Add more colors as needed
+                                    'rgba(84, 214, 127, 1)',
+                                    'rgba(0, 181, 148, 1)',
+                                    'rgba(0, 144, 148, 1)',
+                                    'rgba(0, 107, 126, 1)',
+                                    'rgba(47, 72, 88, 1)'
                                 ],
                                 borderWidth: 1,
                             }]

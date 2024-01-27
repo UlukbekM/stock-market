@@ -366,8 +366,8 @@ export default function SecondRow() {
                     </h1>
                 </div>
 
-                <div className="w-full max-h-80 h-full">
-                    <table className="table overflow-auto ">
+                <div className="w-full max-h-80 h-full overflow-auto ">
+                    <table className="table">
                         <thead className='sticky top-0 z-8 bg-[#202C2D]'>
                             <tr className='h-auto'>
                                 <th className='hidden md:block'></th>
@@ -412,7 +412,7 @@ export default function SecondRow() {
                             </tr>
                         </thead>
 
-                        <tbody className='overflow-y-auto'>
+                        <tbody className='overflow-auto'>
                             {newStocks.map((item, index) => {
                                 return (
                                     <tr key={index} onClick={() => handleRowClick(item.symbol)}
@@ -425,8 +425,6 @@ export default function SecondRow() {
                                     </tr>)
                             })}
                         </tbody>
-                    
-
                     </table>
                 </div>
             

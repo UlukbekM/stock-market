@@ -31,7 +31,7 @@ export default function FirstRow () {
     }, [])
 
     useEffect(() => {
-        console.log('added value')
+        // console.log('added value')
         if(user_id && newValue) {
             getStocks(user_id)
             dispatch(setNewValue(false))
@@ -105,14 +105,11 @@ export default function FirstRow () {
             <div className="rounded-lg bg-[#202C2D] flex flex-col p-5 m-2 lg:max-w-1/2 mt-16 lg:mt-2 basis-4/5 md:w-full">
                 <div className='font-bold'>
                     <h1 className=''>
-                        User value:
+                        Portfolio Value:
                     </h1>
                     <div className='flex'>
-                        <h1 className='text-3xl'>
-                            $
-                        </h1>
                         <h1 className='text-3xl tracking-wider'>
-                            {value}
+                            ${value+balance}
                         </h1>
                     </div>
                 </div>
@@ -137,18 +134,22 @@ export default function FirstRow () {
                             </div>
                         </div> 
                     }
-                    {/* <div className="divider">OR</div> */}
                     <div className='m-3 text-xl divider'>
                         {username}
                     </div>
-                    {/* {session?.user.email} */}
                 </div>
 
-
-                <div className='flex items-center flex-col'>
+                <div className='flex items-center flex-col my-2'>
                     Available Balance:
                     <div className='font-bold text-3xl tracking-wider'>
                         ${balance.toFixed(2)}
+                    </div>
+                </div>
+
+                <div className='flex items-center flex-col my-2'>
+                    Stocks Value:
+                    <div className='font-bold text-3xl tracking-wider'>
+                        ${value}
                     </div>
                 </div>
 
