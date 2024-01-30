@@ -115,39 +115,41 @@ export default function ThirdRow () {
         }
     };
 
-    function getLastWeekdays(): string[] {
-        const weekdays = [];
-        const today = new Date();
+    // function getLastWeekdays(): string[] {
+    //     const weekdays = [];
+    //     const today = new Date();
     
-        // Include today's date
-        const todayFormatted = formatDate(today);
-        weekdays.push(todayFormatted);
+    //     // Include today's date
+    //     const todayFormatted = formatDate(today);
+    //     weekdays.push(todayFormatted);
     
-        while (weekdays.length < 5) {
-            today.setDate(today.getDate() - 1);
+    //     while (weekdays.length < 5) {
+    //         today.setDate(today.getDate() - 1);
     
-            // Check if the current day is a weekday (Monday to Friday)
-            if (today.getDay() >= 1 && today.getDay() <= 5) {
-                const formattedDate = formatDate(today);
-                weekdays.push(formattedDate);
-            }
-        }
+    //         // Check if the current day is a weekday (Monday to Friday)
+    //         if (today.getDay() >= 1 && today.getDay() <= 5) {
+    //             const formattedDate = formatDate(today);
+    //             weekdays.push(formattedDate);
+    //         }
+    //     }
     
-        return weekdays;
-    }
+    //     return weekdays;
+    // }
     
-    function formatDate(date: Date): string {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
+    // function formatDate(date: Date): string {
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     return `${year}-${month}-${day}`;
+    // }
 
     const fetchStock = async (stock?: string) => {
         let holder = symbol
         if(stock) {
             holder = stock
         }
+
+        // console.log(display,holder)
 
         if (holder !== "" && start && end) {
             let apiurl = `https://financialmodelingprep.com/api/v3/historical-price-full/${holder.toUpperCase()}?from=${start}&to=${end}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
@@ -169,10 +171,21 @@ export default function ThirdRow () {
 
                 const dates = newData.map((item:StockAPI) => item.date)
                 setDates(dates)
-                setPriceDate(dates[dates.length-1])
 
                 setStockData(newData)
-                setPrice(newData[newData.length-1]["close"])
+                if(price && range === "1D" && display === holder) {
+                    setPriceDate(dates[dates.length-1])
+                } else if(range === "1D" && display !== holder) {
+                    axios.get(`https://financialmodelingprep.com/api/v3/quote-order/${holder.toUpperCase()}?apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`).then((response) => {
+                        let temp = response.data
+                        const myDate = new Date(temp[0].timestamp * 1000);
+                        setPriceDate(myDate.toDateString())
+                        setPrice(temp[0].price)
+                    })
+                } else {
+                    setPrice(newData[newData.length-1]["close"])
+                    setPriceDate(dates[dates.length-1])
+                }
                 setDisplay(holder.toUpperCase())
 
                 setShares(0.00)
