@@ -161,35 +161,41 @@ export default function ThirdRow () {
             axios.get(apiurl)
             .then((response) => {
                 const data = response.data;
-                let newData
-
-                if(range === "1D") {
-                    newData = data.slice().reverse()
+                console.log(data)
+                if(data.length !== 0) {
+                    let newData
+    
+                    if(range === "1D") {
+                        newData = data.slice().reverse()
+                    } else {
+                        newData = data.historical.slice().reverse();
+                    }
+    
+                    const dates = newData.map((item:StockAPI) => item.date)
+                    setDates(dates)
+    
+                    setStockData(newData)
+                    if(price && range === "1D" && display === holder) {
+                        setPriceDate(dates[dates.length-1])
+                    } else if(range === "1D" && display !== holder) {
+                        axios.get(`https://financialmodelingprep.com/api/v3/quote-order/${holder.toUpperCase()}?apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`).then((response) => {
+                            let temp = response.data
+                            const myDate = new Date(temp[0].timestamp * 1000);
+                            setPriceDate(myDate.toDateString())
+                            console.log(myDate.toDateString())
+                            setPrice(temp[0].price)
+                        })
+                    } else {
+                        setPrice(newData[newData.length-1]["close"])
+                        setPriceDate(dates[dates.length-1])
+                    }
+                    setDisplay(holder.toUpperCase())
+    
+                    setShares(0.00)
+                    setDollars(0)
                 } else {
-                    newData = data.historical.slice().reverse();
+                    alert("Ticker could not be found")
                 }
-
-                const dates = newData.map((item:StockAPI) => item.date)
-                setDates(dates)
-
-                setStockData(newData)
-                if(price && range === "1D" && display === holder) {
-                    setPriceDate(dates[dates.length-1])
-                } else if(range === "1D" && display !== holder) {
-                    axios.get(`https://financialmodelingprep.com/api/v3/quote-order/${holder.toUpperCase()}?apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`).then((response) => {
-                        let temp = response.data
-                        const myDate = new Date(temp[0].timestamp * 1000);
-                        setPriceDate(myDate.toDateString())
-                        setPrice(temp[0].price)
-                    })
-                } else {
-                    setPrice(newData[newData.length-1]["close"])
-                    setPriceDate(dates[dates.length-1])
-                }
-                setDisplay(holder.toUpperCase())
-
-                setShares(0.00)
-                setDollars(0)
             })
         }
         dispatch(setStock(stock? stock: symbol.toUpperCase()))
@@ -480,7 +486,7 @@ export default function ThirdRow () {
                                         <p className='my-auto'>PRICE: </p>
                                         <p className='text-xl md:text-3xl font-bold px-3'>{price}</p>
                                         <p className='my-auto'>USD</p>
-                                        <div className="tooltip mx-3 my-auto" data-tip={`Price based on closing price on ${priceDate}`}>
+                                        <div className="tooltip mx-3 my-auto tooltip-left lg:tooltip-top" data-tip={`Price based on closing price on ${priceDate}`}>
                                             <FaCircleInfo/>
                                         </div>
                                     </div>

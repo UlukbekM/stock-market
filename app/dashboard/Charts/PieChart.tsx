@@ -99,7 +99,7 @@ const StockPieChart: React.FC<StockChartProps> = ({ stockData, symbolAndPricesDa
     }, [stockData, symbolAndPricesData]);
 
     return (
-        <div className="max-w-full overflow-x-auto h-80">
+        <div className="overflow-x-auto h-80 max-w-full">
             <canvas ref={chartContainerRef} />
         </div>
     );

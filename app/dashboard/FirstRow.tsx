@@ -27,7 +27,7 @@ export default function FirstRow () {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        getUser()
+        getUser()   
     }, [])
 
     useEffect(() => {
@@ -109,7 +109,7 @@ export default function FirstRow () {
                     </h1>
                     <div className='flex'>
                         <h1 className='text-3xl tracking-wider'>
-                            ${value+balance}
+                            ${(balance+value).toFixed(2)}
                         </h1>
                     </div>
                 </div>
@@ -139,7 +139,7 @@ export default function FirstRow () {
                     </div>
                 </div>
 
-                <div className='flex items-center flex-col my-2'>
+                <div className='flex items-center flex-col my-2 text-center'>
                     Available Balance:
                     <div className='font-bold text-3xl tracking-wider'>
                         ${balance.toFixed(2)}
