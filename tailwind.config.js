@@ -34,7 +34,8 @@ module.exports = {
                     "warning": "#ff0000",
                     "error": "#ffffff",
 
-                    "test": "#fff"
+                    "test": "#fff",
+                    "background": "#1B2627"
                 },
             }
         ],

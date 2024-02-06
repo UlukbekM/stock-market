@@ -140,7 +140,7 @@ export default function FirstRow () {
                 </div>
 
                 <div className='flex items-center flex-col my-2 text-center'>
-                    Available Balance:
+                    Buying Power:
                     <div className='font-bold text-3xl tracking-wider'>
                         ${balance.toFixed(2)}
                     </div>
