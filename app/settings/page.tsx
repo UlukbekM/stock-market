@@ -169,7 +169,7 @@ export default function Dashboard() {
         deleteUserStocks()
         const { error } = await supabase
         .from('profiles')
-        .update({ balance: 1000 })
+        .update({ balance: 10000 })
         .eq('id', userId)
         
         localStorage.removeItem('savedDate');
