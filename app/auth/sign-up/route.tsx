@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
     // console.log(email,password)
 
-    await supabase.auth.signUp({
+    const {error} = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -22,7 +22,14 @@ export async function POST(request: Request) {
         },
     })
 
-    return NextResponse.redirect(requestUrl.origin, {
-        status: 301,
-    })
+    if(!error) {
+        const redirectUrl = `${requestUrl.origin}/register?checkEmail=true`;
+        return NextResponse.redirect(redirectUrl, { status: 301 });
+    }
+
+    // return NextResponse.redirect(requestUrl.origin, {
+    //     status: 301,
+    // })
+
+
 }

@@ -1,12 +1,18 @@
 "use client"
 import Link from "next/link"
 import { FaArrowLeft } from "react-icons/fa6";
+import { useSearchParams } from 'next/navigation'
+import { IoMailUnread } from "react-icons/io5";
 
 export default function login() {
+    const searchParams = useSearchParams();
+    const message = searchParams.get('checkEmail')
+    console.log(message)
     return(
         <div className="flex justify-center items-center min-h-screen w-screen">
             <div className="flex drop-shadow-2xl">
-                <div className="bg-white p-8 rounded-l border border-gray-300 shadow-md w-screen h-screen lg:h-auto lg:w-1/4 text-black lg:basis-1/2 justify-center flex flex-col">
+                {/* <div className="bg-white p-8 rounded-l border border-gray-300 shadow-md w-screen min-h-screen lg:min-h-full lg:h-auto lg:w-1/4 text-black lg:basis-1/2 justify-center flex flex-col"> */}
+                <div className="bg-white p-8 rounded-l border border-gray-300 shadow-md w-screen min-h-screen lg:min-h-full lg:h-auto lg:w-80 text-black lg:basis-1/2 justify-center flex flex-col">
                     <Link href={"/"} className=" hover:text-gray-600 focus:outline-none my-6 flex">
                         <FaArrowLeft className="my-auto mx-2"/> Back
                     </Link>
@@ -29,14 +35,12 @@ export default function login() {
                             Sign Up
                         </button>
                     </form>
-                    {/* {registered && (
-                        <div className="">
-                        Please check your email for verification instructions.
-                        </div>
-
-                        ~~~~~~~~~~~~add check email~~~~~~~~~~
-
-                    )} */}
+                    {message === "true" && (
+                            <div className={`my-2 text-green-600 flex justify-center`}>
+                                <IoMailUnread className="my-auto mr-2"/>
+                                <p>Please verify your email.</p>
+                            </div>
+                        )}
                     <p className="text-sm font-light text-black pt-4 text-center ">
                         Already have an account?
                         <Link href="login" className="font-medium text-primary-600 hover:underline dark:text-primary-500 mx-1">Log In</Link>
