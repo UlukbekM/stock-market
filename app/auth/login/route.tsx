@@ -22,9 +22,9 @@ export async function POST(request: Request) {
         return NextResponse.redirect(redirectUrl, { status: 302 });
     }
 
-    return async () => {
+    // return async () => {
         return NextResponse.redirect(requestUrl.origin, {
             status: 301,
         })
-    }
+    // }
 }

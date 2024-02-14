@@ -35,17 +35,17 @@ export default function register() {
                                 className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                                 required />
                         </div>
-                        {error && (
-                            <div className={`my-2 text-red-500 flex`}>
-                                <FaCircleExclamation className="my-auto mr-2"/>
-                                <p> An error occurred: {error}</p>
-                            </div>
-                        )}
                         <button type="submit"
                             className="w-full bg-[#B2F35F] font-semibold text-black p-2 rounded hover:bg-[#B2F35F] focus:outline-none focus:ring focus:border-blue-300">
                             Login
                         </button>
                     </form>
+                    {error && (
+                        <div className={`my-2 text-red-500 flex`}>
+                            <FaCircleExclamation className="my-auto mr-2"/>
+                            <p> An error occurred: {error}</p>
+                        </div>
+                    )}
                     <p className="text-sm font-light text-black pt-4 text-center">
                         Don't have an account? <Link href="register" className="font-medium text-primary-600 hover:underline dark:text-primary-500 mx-1">Sign Up</Link>
                     </p>

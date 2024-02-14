@@ -180,6 +180,7 @@ export default function ThirdRow () {
                     } else if(range === "1D" && display !== holder) {
                         axios.get(`https://financialmodelingprep.com/api/v3/quote-order/${holder.toUpperCase()}?apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`).then((response) => {
                             let temp = response.data
+                            console.log(temp)
                             const myDate = new Date(temp[0].timestamp * 1000);
                             setPriceDate(myDate.toDateString())
                             console.log(myDate.toDateString())
