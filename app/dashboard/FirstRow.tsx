@@ -77,8 +77,7 @@ export default function FirstRow () {
     const getImage = async (id:string) => {
         const { data, error } = await supabase.storage.from('profile').list(id + '/');
 
-        if(data) {
-            // console.log(data)
+        if(data && data.length>0) {
             if(data[0].name === ".emptyFolderPlaceholder") {
                 if(data[1]) {
                     setImageUrl(data[1].name)

@@ -45,69 +45,69 @@ export default function Index() {
                         <div className="md:input">https://VIRTUALSTOCKMARKET.com</div>
                     </div>
                     <div className="flex justify-center bg-base-200">
-                        <img src="https://i.imgur.com/V5k9XxQ.png" alt="" className="w-full"/>
+                        <img src="https://i.imgur.com/zEBj1Dp.png" alt="" className="w-full"/>
                     </div>
                 </div>
             </div>
 
-            <div>
-                <img src="https://i.imgur.com/olmS5qx.png"/>
+            <div className="flex bg-white flex-col md:flex-row">
+                <div className="basis-1/2 text-black p-10 text-lg flex place-items-center">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+                <div className="basis-1/2 p-10">
+                    <img src="https://i.imgur.com/JjdI2zW.png" className=" rounded-lg"/>
+                </div>
             </div>
 
-            <div className="bg-background flex flex-col">
-                <div className="text-center my-5 font-semibold tracking-wider text-white">
+            <div className="bg-background flex flex-col mt-10">
+                <div className="text-center my-5 font-bold tracking-wider text-white">
                     <h1 className="text-4xl mx-4">Practice Trading Without The Risk</h1>
                 </div>
-                <div className="flex flex-col md:flex-row m-5 md:m-10">
-                    <div className="flex flex-col basis-1/3 mb-4 mx-4">
-                        {/* <div className="my-2">
-                        </div> */}
-                        <div className="my-2 flex font-semibold">
-                            <FaMoneyBill1Wave className="text-2xl text-white mr-2 my-auto"/>
-                            <h1 className="text-xl text-white">Start with a virtual $1,000 to start paper trading</h1>
+                <div className="flex flex-col md:flex-row m-5 md:m-0 md:mx-10 md:my-5">
+                    <div className="flex flex-col basis-1/3 mb-4 lg:mb-0 mx-2 p-4 rounded-lg border-2 border-[#495152]">
+                        <div className="my-2 flex font-bold justify-between">
+                            <h1 className="text-xl text-white">Start with a virtual $10,000 to start paper trading</h1>
+                            <FaMoneyBill1Wave className="text-2xl text-primary my-auto"/>
                         </div>
-                        <div className="my-2">
-                            <p className="text-md">
-                                No deposit needed. Practice trading stocks with virtual money to sharpen your knowledge of how the stock market works and how to use an online brokerage.
-                            </p>
+                        <div className="my-2 text-gray-400 text-md">
+                            No deposit needed. Practice trading stocks with virtual money to sharpen your knowledge of how the stock market works and how to use an online brokerage.
                         </div>
                     </div>
 
-                    <div className="flex flex-col basis-1/3 mb-4 mx-4">
-                        {/* <div className="my-2">
-                        </div> */}
-                        <div className="my-2 flex font-semibold">
-                            <FaChartLine className="text-2xl text-white mr-2 my-auto"/>
+                    <div className="flex flex-col basis-1/3 mb-4 lg:mb-0 mx-2 p-4 rounded-lg border-2 border-[#495152]">
+                        <div className="my-2 flex font-bold justify-between">
                             <h1 className="text-xl text-white">Search Stocks</h1>
+                            <FaChartLine className="text-2xl text-primary my-auto"/>
                         </div>
-                        <div className="my-2">
-                            <p className="text-md">
-                                On the Virtual Stock Market, users can effortlessly search for and purchase stocks, simplifying the investing process. 
-                                As they make purchases, users can gradually build their portfolios, diversifying their investments to align with their financial objectives.
-                            </p>
+                        <div className="my-2 text-gray-400 text-md">
+                            On the Virtual Stock Market, users can effortlessly search for and purchase stocks, simplifying the investing process. 
+                            As they make purchases, users can gradually build their portfolios, diversifying their investments to align with their financial objectives.
                         </div>
                     </div>
 
-                    <div className="flex flex-col basis-1/3 mb-4 mx-4">
-                        {/* <div className="my-2">
-                        </div> */}
-                        <div className="my-2 flex font-semibold">
-                            <FaArrowsRotate className="text-2xl text-white mr-2 my-auto"/>
+                    <div className="flex flex-col basis-1/3 mb-4 lg:mb-0 mx-2 p-4 rounded-lg border-2 border-[#495152]">
+                        <div className="my-2 flex font-bold justify-between">
                             <h1 className="text-xl text-white">Reset your account at any time</h1>
+                            <FaArrowsRotate className="text-2xl text-primary my-auto"/>
                         </div>
-                        <div className="my-2">
-                            <p className="text-md">
-                                Restart your virtual trading journey at any time with just a click. 
-                                Reset your portfolio effortlessly to refine your strategies and explore new investment approaches in a risk-free environment.
-                            </p>
+                        <div className="my-2 text-gray-400 text-md">
+                            Restart your virtual trading journey at any time with just a click. 
+                            Reset your portfolio effortlessly to refine your strategies and explore new investment approaches in a risk-free environment.
                         </div>
                     </div>
                 </div>
 
-                <div className="flex justify-center">
-                    <div className="bg-secondary p-5 rounded-lg">
-                        <h1 className="text-3xl font-bold my-2 text-white">Practice Trading Without The Risk</h1>
+                <div className="flex justify-center my-5">
+                    <div className="bg-primary p-5 rounded-lg text-black w-1/2 text-center">
+                        <h1 className="text-3xl font-bold my-2 ">Practice Trading Without The Risk</h1>
                         <p>Simulated trading can help all levels of traders to practice their trading skills and strategies.</p>
+                        <Link href={"register"} className=" my-8 lg:w-1/2 group">
+                            <button className="btn w-full btn-primary font-semibold">Open an account
+                                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                                    <FaArrowRight className="text-lg"/>
+                                </span>
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -68,7 +68,7 @@ export default function Dashboard() {
 
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
-        console.log(user)
+        // console.log(user)
 
         if(user && user.email) {
             const { data, error } = await supabase
@@ -88,7 +88,7 @@ export default function Dashboard() {
     const getImage = async (id:string) => {
         const { data, error } = await supabase.storage.from('profile').list(id + '/');
 
-        if(data) {
+        if(data && data.length > 0) {
             if(data[0].name === ".emptyFolderPlaceholder") {
                 if(data[1]) {
                     setImagePath(data[1].name)
@@ -96,8 +96,6 @@ export default function Dashboard() {
             } else{
                 setImagePath(data[0].name)
             }
-        } else {
-            console.log(error)
         }
     }
 

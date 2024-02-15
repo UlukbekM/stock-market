@@ -22,14 +22,12 @@ export async function POST(request: Request) {
         },
     })
 
-    if(!error) {
-        const redirectUrl = `${requestUrl.origin}/register?checkEmail=true`;
-        return NextResponse.redirect(redirectUrl, { status: 301 });
+    if(error) {
+        return NextResponse.redirect(requestUrl.origin, {
+            status: 301,
+        })
     }
 
-    // return NextResponse.redirect(requestUrl.origin, {
-    //     status: 301,
-    // })
-
-
+    const redirectUrl = `${requestUrl.origin}/register?checkEmail=true`;
+    return NextResponse.redirect(redirectUrl, { status: 301 });
 }
