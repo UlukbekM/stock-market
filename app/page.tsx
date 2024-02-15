@@ -42,7 +42,7 @@ export default function Index() {
             <div className="flex justify-center w-full">
                 <div className="mockup-browser border bg-base-300 w-full md:w-5/6 rounded-b-none shadow-lg">
                     <div className="mockup-browser-toolbar">
-                        <div className="md:input">https://VIRTUALSTOCKMARKET.com</div>
+                        <div className="md:input">https://virtualstockmarket.vercel.app/dashboard</div>
                     </div>
                     <div className="flex justify-center bg-base-200">
                         <img src="https://i.imgur.com/zEBj1Dp.png" alt="" className="w-full"/>
@@ -98,10 +98,10 @@ export default function Index() {
                 </div>
 
                 <div className="flex justify-center my-5">
-                    <div className="bg-primary p-5 rounded-lg text-black w-1/2 text-center">
-                        <h1 className="text-3xl font-bold my-2 ">Practice Trading Without The Risk</h1>
-                        <p>Simulated trading can help all levels of traders to practice their trading skills and strategies.</p>
-                        <Link href={"register"} className=" my-8 lg:w-1/2 group">
+                    <div className="bg-white p-5 rounded-lg text-black w-1/2 flex flex-col items-center">
+                        <h1 className="text-3xl font-bold my-3">Practice Trading Without The Risk</h1>
+                        <p className="m-3 text-md">Simulated trading can help all levels of traders to practice their trading skills and strategies.</p>
+                        <Link href={"register"} className="flex m-5 w-1/2 group">
                             <button className="btn w-full btn-primary font-semibold">Open an account
                                 <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                                     <FaArrowRight className="text-lg"/>
