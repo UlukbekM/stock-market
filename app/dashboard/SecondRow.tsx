@@ -8,7 +8,7 @@ import StockPieChart from './Charts/PieChart';
 import { FaChevronDown } from "react-icons/fa6";
 import { FaChevronUp } from "react-icons/fa6";
 
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from '../GlobalRedux/store';
 import { setBalance, setStock, setUserId, setValue, setTransaction, setNewValue } from '../GlobalRedux/Features/counter/counterSlice';
 

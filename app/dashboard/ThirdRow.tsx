@@ -6,7 +6,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from '@/types/supabase'
 import { FaCircleInfo } from "react-icons/fa6";
 
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from '../GlobalRedux/store';
 import { setBalance, setStock, setTransaction } from '../GlobalRedux/Features/counter/counterSlice';
 import { setFips } from 'crypto';

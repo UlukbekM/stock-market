@@ -4,7 +4,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from '@/types/supabase'
 import PortfolioChart from './Charts/PortfolioChart';
 
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from '../GlobalRedux/store';
 import { setNewValue, setUserId } from '../GlobalRedux/Features/counter/counterSlice';
 
