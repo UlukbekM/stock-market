@@ -39,7 +39,7 @@ export default async function Dashboard() {
 
 
         <div className='flex-1 p-3 flex flex-col'>
-            <FirstRow/>
+            {/* <FirstRow/> */}
             <SecondRow/>
             <ThirdRow/>
         </div>
