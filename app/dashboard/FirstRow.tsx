@@ -1,14 +1,12 @@
 "use client"
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from '@/types/supabase'
-import checkAndRemoveSavedDate from './TimeCheck';
 import PortfolioChart from './Charts/PortfolioChart';
 
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import type { RootState } from '../GlobalRedux/store';
-import { setBalance, setNewValue, setStock, setUserId } from '../GlobalRedux/Features/counter/counterSlice';
+import { setNewValue, setUserId } from '../GlobalRedux/Features/counter/counterSlice';
 
 interface userValue {
     date: string,
@@ -31,7 +29,6 @@ export default function FirstRow () {
     }, [])
 
     useEffect(() => {
-        // console.log('added value')
         if(user_id && newValue) {
             getStocks(user_id)
             dispatch(setNewValue(false))
