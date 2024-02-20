@@ -7,7 +7,6 @@ import { IoMailUnread } from "react-icons/io5";
 export default function login() {
     const searchParams = useSearchParams();
     const message = searchParams.get('checkEmail')
-    console.log(message)
     return(
         <div className="flex justify-center items-center min-h-screen w-screen">
             <div className="flex drop-shadow-2xl">

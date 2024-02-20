@@ -10,6 +10,8 @@ import { FaDollarSign } from "react-icons/fa6";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { FaChartPie } from "react-icons/fa6";
+import { motion } from "framer-motion"
+import FramerImage from "./framerimage";
 
 
 export default function Index() {
@@ -41,14 +43,7 @@ export default function Index() {
             </div>
 
             <div className="flex justify-center w-full">
-                <div className="mockup-browser border bg-base-300 w-full md:w-5/6 rounded-b-none shadow-lg">
-                    <div className="mockup-browser-toolbar">
-                        <div className="md:input">https://virtualstockmarket.vercel.app/dashboard</div>
-                    </div>
-                    <div className="flex justify-center bg-base-200">
-                        <img src="https://i.imgur.com/zEBj1Dp.png" alt="" className="w-full"/>
-                    </div>
-                </div>
+                <FramerImage/>
             </div>
 
             <div className="flex bg-white flex-col md:flex-row">
