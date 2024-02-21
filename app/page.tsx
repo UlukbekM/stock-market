@@ -48,13 +48,13 @@ export default function Index() {
 
             <div className="flex bg-white flex-col md:flex-row">
                 <div className="basis-1/2 text-black p-10 flex place-items-center flex-col justify-center">
-                    <h1 className="text-4xl my-4 font-bold tracking-wider">Perfect Your Trading</h1>
-                    <p className="text-2xl">
+                    <h1 className="text-4xl my-4 font-bold tracking-wider  text-center">Perfect Your Trading</h1>
+                    <p className="text-2xl text-justify">
                         Simulated trading, often referred to as paper trading, enables individuals to trade using virtual funds, allowing for the practice of buying and selling securities without any financial risk. 
                         It closely mimics real trading conditions, providing a safe environment to hone trading skills.
                     </p>
                 </div>
-                <div className="basis-1/2 p-10">
+                <div className="basis-1/2 p-10 flex items-center">
                     <img src="https://i.imgur.com/JjdI2zW.png" className=" rounded-lg"/>
                 </div>
             </div>
