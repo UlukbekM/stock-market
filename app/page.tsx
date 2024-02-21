@@ -100,7 +100,7 @@ export default function Index() {
 
                 <div className="flex justify-center my-5">
                     <div className="bg-[#e6e6e6] p-5 rounded-lg text-black lg:w-1/2 flex flex-col items-center text-center">
-                        <h1 className="text-3xl font-bold my-3">Practice Trading Without The Risk</h1>
+                        <h1 className="text-3xl font-bold my-3">Start sharpening your trading skillss</h1>
                         <p className="m-3 text-md">Simulated trading can help all levels of traders to practice their trading skills and strategies.</p>
                         <Link href={"register"} className="flex m-5 w-1/2 group">
                             <button className="btn w-full btn-primary font-semibold">Open an account
