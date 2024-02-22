@@ -1,4 +1,5 @@
 import './globals.css'
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
     title: 'Virtual Stock Market',
@@ -20,6 +21,7 @@ export default function RootLayout({
             <body>
                 <main className="min-h-screen bg-background flex flex-col items-center ">
                     {children}
+                    <Analytics/>
                 </main>
                 <script src="./node_modules/preline/dist/preline.js"></script>
             </body>
