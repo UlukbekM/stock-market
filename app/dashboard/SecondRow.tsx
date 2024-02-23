@@ -135,6 +135,7 @@ export default function SecondRow() {
             getPrices(stock, balance, id)
         } else {
             // console.log('no stocks')
+            dispatch(setValue(0))
 
             setSymbolAndPrices([
                 {

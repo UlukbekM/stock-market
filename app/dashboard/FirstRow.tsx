@@ -38,7 +38,6 @@ export default function FirstRow () {
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if(user) {
-            // console.log(user)
             dispatch(setUserId(user.id))
             getStocks(user.id)
             getImage(user.id)
@@ -47,14 +46,14 @@ export default function FirstRow () {
     }
 
     const getUsername = async (id:string) => {
-            const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', id);
-            // console.log(data)
-            if(data && data[0].username) {
-                setUsername(data[0].username)
-            }
+        const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', id);
+        // console.log(data)
+        if(data && data[0].username) {
+            setUsername(data[0].username)
+        }
     }
 
     const getStocks = async (user_id:string) => {

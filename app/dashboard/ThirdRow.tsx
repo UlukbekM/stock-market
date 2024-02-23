@@ -34,15 +34,11 @@ export default function ThirdRow () {
     const balance = useSelector((state:RootState) => state.counter.balance)
     const user_id = useSelector((state:RootState) => state.counter.user_id)
     const stock = useSelector((state:RootState) => state.counter.stock)
-    const value = useSelector((state:RootState) => state.counter.value)
     const dispatch = useDispatch()
-
 
     // CHART
     const [stockData, setStockData] = useState<StockAPI[]>([]);
     const [dates, setDates] = useState<string[]>([]);
-    // const [tempDates, setTempDates] = useState<string[]>([]);
-    const [chartDates, setChartDates] = useState<string>("")
 
     // TICKER
     const [symbol, setSymbol] = useState<string>("")
@@ -58,20 +54,14 @@ export default function ThirdRow () {
 
     //RANGE
     const [range, setRange] = useState<string>("1D")
-    const [first,setFirst] = useState<StockAPI[]>()     //1D
-    const [second,setSecond] = useState<StockAPI[]>()   //5D
-    const [third,setThird] = useState<StockAPI[]>()     //1M
-    const [fourth,setFourth] = useState<StockAPI[]>()   //6M
-    const [fifth,setFifth] = useState<StockAPI[]>()     //YTD
-    const [sixth,setSixth] = useState<StockAPI[]>()     //1Y
-    const [seventh,setSeventh] = useState<StockAPI[]>() //5Y
-    // const [eight,setEighth] = useState()    //Max
     const [start,setStart] = useState<string>("")
     const [end,setEnd] = useState<string>("")
 
     
     useEffect(() => {
         get1D()
+        // console.log('test')
+        dispatch(setStock(""))
     }, [])
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -115,34 +105,6 @@ export default function ThirdRow () {
         }
     };
 
-    // function getLastWeekdays(): string[] {
-    //     const weekdays = [];
-    //     const today = new Date();
-    
-    //     // Include today's date
-    //     const todayFormatted = formatDate(today);
-    //     weekdays.push(todayFormatted);
-    
-    //     while (weekdays.length < 5) {
-    //         today.setDate(today.getDate() - 1);
-    
-    //         // Check if the current day is a weekday (Monday to Friday)
-    //         if (today.getDay() >= 1 && today.getDay() <= 5) {
-    //             const formattedDate = formatDate(today);
-    //             weekdays.push(formattedDate);
-    //         }
-    //     }
-    
-    //     return weekdays;
-    // }
-    
-    // function formatDate(date: Date): string {
-    //     const year = date.getFullYear();
-    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
-    //     const day = String(date.getDate()).padStart(2, '0');
-    //     return `${year}-${month}-${day}`;
-    // }
-
     const fetchStock = async (stock?: string) => {
         let holder = symbol
         if(stock) {
@@ -161,7 +123,7 @@ export default function ThirdRow () {
             axios.get(apiurl)
             .then((response) => {
                 const data = response.data;
-                console.log(data)
+                // console.log(data)
                 if(data.length !== 0) {
                     let newData
     
@@ -180,10 +142,10 @@ export default function ThirdRow () {
                     } else if(range === "1D" && display !== holder) {
                         axios.get(`https://financialmodelingprep.com/api/v3/quote-order/${holder.toUpperCase()}?apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`).then((response) => {
                             let temp = response.data
-                            console.log(temp)
+                            // console.log(temp)
                             const myDate = new Date(temp[0].timestamp * 1000);
                             setPriceDate(myDate.toDateString())
-                            console.log(myDate.toDateString())
+                            // console.log(myDate.toDateString())
                             setPrice(temp[0].price)
                         })
                     } else {
@@ -218,12 +180,6 @@ export default function ThirdRow () {
                 .from('stock')
                 .insert([ { "symbol":display.toUpperCase(), "amount":shares, price, user_id }, ])
                 .select();
-    
-                if (error) {
-                    console.error('Error inserting data:', error);
-                } else {
-                    console.log('Data inserted successfully:', data);
-                }
 
                 if(data) {
                     const { error } = await supabase
@@ -231,10 +187,7 @@ export default function ThirdRow () {
                     .update({ balance: balance - dollars })
                     .eq('id', user_id)
                 
-                    if (error) {
-                        console.error('Error updating balance:', error);
-                    } else {
-                        console.log('Balance updated successfully');
+                    if (!error) {
                         dispatch(setBalance(balance - dollars));
                         let message = ""
                         if(shares === 1) message = " share of "
@@ -243,7 +196,7 @@ export default function ThirdRow () {
                     }
                 }
             } else {
-                alert('not enough funds')
+                dispatch(setTransaction("Not enough funds to purchase stocks"))
             }
         } else {
             console.log('error buying stock')
@@ -281,17 +234,17 @@ export default function ThirdRow () {
                             .delete()
                             .eq('id', transaction.id)
                 
-                            if (error) {
-                                console.error('Error deleting stock:', error.message);
-                            } else {
-                                console.log('deleted share: ' + transaction.id)
-                            }
+                            // if (error) {
+                            //     console.error('Error deleting stock:', error.message);
+                            // } else {
+                            //     console.log('deleted share: ' + transaction.id)
+                            // }
                             
                             data.pop()
                             sharesToSell -= transaction.amount;
                         } else {
                         // UPDATE STOCK AMOUNT ON SUPABASE BASED ON TRANSACTION.ID
-                            console.log('updating share')
+                            // console.log('updating share')
                             const updatedAmount = transaction.amount - sharesToSell;
 
                             const { data, error } = await supabase
@@ -300,13 +253,13 @@ export default function ThirdRow () {
                             .eq('id', transaction.id)
                             .select()
                 
-                            if(data) {
-                                console.log('updated share: ' + transaction.id)
-                            }
+                            // if(data) {
+                            //     console.log('updated share: ' + transaction.id)
+                            // }
                 
-                            if (error) {
-                                console.error('Error updating stock:', error.message);
-                            }
+                            // if (error) {
+                            //     console.error('Error updating stock:', error.message);
+                            // }
                 
                             sharesToSell = 0;
                         }
@@ -341,7 +294,6 @@ export default function ThirdRow () {
         // console.log(item)
         if(item !== range) {
             setRange(item)
-            console.log('range changed to ' + item)
             if(item === "1D") get1D()
             else if(item === "5D") get5D()
             else if(item === "1M") get1M()
@@ -423,7 +375,6 @@ export default function ThirdRow () {
         const day = String(yearFirstDate.getDate()).padStart(2, '0');
     
         let date = yearFirstDateYear + "-" + month + "-" + day
-        // console.log(date)
         setStart(date)
     }
 
@@ -457,6 +408,11 @@ export default function ThirdRow () {
         if(stock !== "" && stock !== symbol) {
             setSymbol(stock)
             fetchStock(stock)
+        } else if (stock === "") {
+            setStockData([])
+            setDisplay("")
+            setSymbol("")
+            setDates([])
         }
     }, [stock])
 
@@ -471,10 +427,8 @@ export default function ThirdRow () {
             <div className='rounded-lg bg-secondary flex p-5 flex-col m-2 flex-grow md:w-3/5'>
                 <div className='flex flex-col'>
                     <div className='flex sm:flex-row flex-col'>
-                        {/* <button onClick={() => fetchStock()}>test</button> */}
                         <div className='md:basis-2/8 flex my-3'>
                             <input value={symbol} onChange={(e) => setSymbol(e.target.value)} maxLength={4} className=' uppercase rounded-lg mx-4 my-2 bg-[#1b2627] text-[#748384] p-2 w-auto'/>
-                            {/* <button onClick={()=>fetchStock()} className=' button block bg-[#B2F35F] hover:bg-[#8ec24c] text-black py-2 px-4 rounded-md my-2 font-semibold'>Search</button> */}
                             <button onClick={()=>fetchStock()} className="btn btn-primary my-auto">Search</button>
                         </div>
                         {display && 
@@ -530,11 +484,6 @@ export default function ThirdRow () {
                             onClick={() => changeRange("5Y")}>
                             5Y
                         </button>
-                        {/* <button
-                            className={`my-2 mx-3 border-b-2 border-secondary ${range === "Max" ? "border-accent text-accent" : ""}`}
-                            onClick={() => changeRange("Max")}>
-                            Max
-                        </button> */}
                     </div>
                     <div>
                         {stockData !== null && <StockChart stockData={stockData} dates={dates}/>}
@@ -552,10 +501,8 @@ export default function ThirdRow () {
                     <form onSubmit={BuyOrSell} className='flex justify-center flex-col p-5 items-center'>
                         <div className='flex justify-between w-full py-3'>
                             <label className='my-auto'>Order Type</label>
-                            {/* <input type="text" placeholder={`${buysell ? "Sell Order" : "Buy Order"}`} className="input input-bordered max-w-xs" disabled /> */}
                             <select className="select max-w-xs"defaultValue={"Order"}>
                                 <option value={"Order"}>{buysell ? "Sell Order" : "Buy Order"}</option>
-                                {/* <option disabled>Shares</option> */}
                             </select>
                         </div>
 

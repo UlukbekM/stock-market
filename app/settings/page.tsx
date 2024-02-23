@@ -178,7 +178,7 @@ export default function Dashboard() {
     }
 
     return(
-    <div className="flex flex-row bg-[#1B2627] w-full text-white h-full min-h-screen">
+    <div className="flex flex-row bg-[#1B2627] text-white h-full w-full min-h-screen">
         <MobileHeader/>
         <div className='hidden lg:flex flex-col p-2 justify-between h-screen sticky top-0'>
             <div>
@@ -272,7 +272,7 @@ export default function Dashboard() {
                             <p className="py-4">Are you sure you want to restart your account?</p>
                             <p className="py-4">This action cannot be reverted.</p>
                             <div className="modal-action flex justify-between">
-                                <button className="btn btn-warning" onClick={()=>restartAccount()}>Confirm</button>
+                                <button className="btn bg-[#b80000] hover:bg-[#cc0000] text-white" onClick={()=>restartAccount()}>Confirm</button>
                                 <form method="dialog">
                                     <button className="btn ">Cancel</button>
                                 </form>

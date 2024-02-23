@@ -21,10 +21,16 @@ export default function TransactionAlert() {
     return (
         <div className="fixed bottom-0 left-0 right-0 mx-2 my-2 md:w-auto md:right-auto">
             {alert && (
-                <div role="alert" className="alert alert-success bg-primary p-3 rounded w-full flex">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <div role="alert" className={`alert ${message === "Not enough funds to purchase stocks" ? "alert-error bg-error" : "alert-success bg-primary"} p-3 rounded w-full flex`}>
+                    {message === "Not enough funds to purchase stocks" ? 
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        :
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    }
                     <span className="text-base ml-2">{message}</span>
                 </div>
             )}

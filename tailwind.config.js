@@ -32,7 +32,7 @@ module.exports = {
                     "info": "#ff00ff",
                     "success": "#ffffff",
                     "warning": "#ff0000",
-                    "error": "#ffffff",
+                    "error": "#ff3333",
 
                     "test": "#fff",
                     "background": "#1B2627"

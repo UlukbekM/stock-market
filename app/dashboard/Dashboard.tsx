@@ -9,9 +9,8 @@ import Link from 'next/link';
 import MobileHeader from '../MobileHeader/MobileHeader';
 
 export default async function Dashboard() {
-
     return(
-    <div className="flex bg-[#1B2627] w-full text-white h-full min-h-screen min-w-screen">
+    <div className="flex bg-[#1B2627] w-full text-white h-full min-h-screen  ">
         <MobileHeader/>
         <div className='hidden lg:flex flex-col p-3 justify-between h-screen sticky top-0'>
             <div>
