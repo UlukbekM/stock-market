@@ -13,7 +13,7 @@ export default function FramerImage() {
                 <div className="md:input">https://virtualstockmarket.vercel.app/dashboard</div>
             </div>
             <div className="flex justify-center bg-base-200">
-                <img src="https://i.imgur.com/zEBj1Dp.png" alt="" className="w-full"/>
+                <img src="https://i.imgur.com/YUkm3V5.png" alt="" className="w-full"/>
             </div>
         </motion.div>
     )
