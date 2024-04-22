@@ -68,17 +68,17 @@ export default function Dashboard() {
 
     const getUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
-        // console.log(user)
 
         if(user && user.email) {
             const { data, error } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id);
-            // console.log(data)
+
             if(data && data[0].username) {
                 setUsername(data[0].username)
             }
+            
             setUserId(user.id)
             setEmail(user.email)
             getImage(user.id)
@@ -219,7 +219,7 @@ export default function Dashboard() {
                         {imagePath ? 
                             <div className="avatar m-3">
                                 <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE+imagePath} />
+                                    <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE + userId + "/" + imagePath} />
                                 </div>
                             </div>
                             :

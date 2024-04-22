@@ -22,11 +22,16 @@ export default function FirstRow () {
     const [userValues,setUserValues] = useState<userValue[]>([])
     const [imageUrl, setImageUrl] = useState<string>("")
     const [username, setUsername] = useState<string>("user")
+    // const [userimg, setUserimg] = useState<string>("user")
     const dispatch = useDispatch()
 
     useEffect(() => {
         getUser()   
     }, [])
+
+    // useEffect(() => {
+    //     console.log(user_id) 
+    // }, [user_id])
 
     useEffect(() => {
         if(user_id && newValue) {
@@ -116,10 +121,10 @@ export default function FirstRow () {
 
             <div className='p-5 rounded-lg bg-[#202C2D] m-2 basis-1/5 md:mt-16 lg:mt-2 flex justify-center flex-col items-center max-w-40'>
                 <div className='flex w-full my-3 flex-col items-center'>
-                    {imageUrl ? 
+                    {imageUrl && user_id ? 
                         <div className="avatar basis-1/4 my-3">
                             <div className="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE+imageUrl} />
+                                <img src={process.env.NEXT_PUBLIC_SUPABASE_IMAGE + user_id + "/" + imageUrl} />
                             </div>
                         </div>
                         :
